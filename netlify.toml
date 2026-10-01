@@ -1,0 +1,30 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  # Vite 8 requires Node 20.19+ / 22.12+
+  NODE_VERSION = "22"
+
+# API бэкенда (FastAPI на VPS) — проксируем через Netlify, чтобы фронт ходил на /api с того же домена
+[[redirects]]
+  from = "/api/*"
+  to = "http://5.39.249.108:8010/api/:splat"
+  status = 200
+  force = true
+
+# SPA: любой неизвестный путь отдаёт index.html — работают /v1 и страница 404 из React Router
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/fonts/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
