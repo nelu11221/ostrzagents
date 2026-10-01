@@ -1,40 +1,15 @@
-import { useCallback, useEffect, useState } from 'react'
 import { Closing, Footer, MobileCta } from '../components/landing/Closing'
 import { LeadgenDemo, SalesDemo } from '../components/landing/Demos'
 import { Header } from '../components/landing/Header'
 import { Hero } from '../components/landing/Hero'
 import { HowItWorks, Ticker } from '../components/landing/HowItWorks'
-import { ProductSection, type PlansStatus } from '../components/landing/ProductSection'
+import { ProductSection } from '../components/landing/ProductSection'
 import { Together } from '../components/landing/Together'
-import { DEFAULT_CONTACT, ru } from '../content/ru'
-import { fetchPublicConfig, type Plan } from '../lib/api'
+import { ru } from '../content/ru'
+import { usePublicConfig } from '../lib/usePublicConfig'
 
 export default function LandingV1() {
-  const [contact, setContact] = useState(DEFAULT_CONTACT)
-  const [plans, setPlans] = useState<Plan[]>([])
-  const [status, setStatus] = useState<PlansStatus>('loading')
-  const [attempt, setAttempt] = useState(0)
-
-  useEffect(() => {
-    const controller = new AbortController()
-    fetchPublicConfig(controller.signal)
-      .then((config) => {
-        setPlans(config.plans ?? [])
-        if (config.contact) setContact(config.contact)
-        setStatus('ready')
-      })
-      .catch((error: unknown) => {
-        if (controller.signal.aborted) return
-        console.error('Не удалось загрузить тарифы', error)
-        setStatus('error')
-      })
-    return () => controller.abort()
-  }, [attempt])
-
-  const retry = useCallback(() => {
-    setStatus('loading')
-    setAttempt((n) => n + 1)
-  }, [])
+  const { contact, plans, status, retry } = usePublicConfig()
 
   const contactUrl = `https://t.me/${contact}`
   const planById = (id: string) => plans.find((p) => p.id === id)
