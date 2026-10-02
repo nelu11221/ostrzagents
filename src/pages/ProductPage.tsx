@@ -119,7 +119,7 @@ export default function ProductPage({ id }: { id: ProductId }) {
           </Container>
         </section>
 
-        <Pricing planHref={planHref} title={page.pricingTitle} />
+        <Pricing planHref={planHref} setupHref={tgLink(contact, msg.setup)} title={page.pricingTitle} />
 
         <Faq items={product.faq} title={page.faqTitle} />
 

@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { pricing, type PeriodId } from '../../content/ru'
 import { PixelBg } from '../effects/PixelBg'
 import { TONE } from '../landing/theme'
-import { Button, Check, Container, Label, cx } from '../ui/primitives'
+import { Arrow, Button, Check, Container, Label, cx } from '../ui/primitives'
 
 type Plan = (typeof pricing.plans)[number]
 
@@ -19,13 +19,14 @@ function separateOf(period: PeriodId) {
 
 type Props = {
   planHref: (planName: string, period: string) => string
+  setupHref: string
   title?: string
   id?: string
 }
 
 // Три тарифа в один ряд и на один экран: Лидоген · Связка (выделена) · AI-сейлз.
 // Срок — тест на 3 дня, месяц или 3 месяца со скидкой 20%.
-export function Pricing({ planHref, title, id = 'pricing' }: Props) {
+export function Pricing({ planHref, setupHref, title, id = 'pricing' }: Props) {
   const [period, setPeriod] = useState<PeriodId>('month')
   const current = pricing.periods.find((p) => p.id === period)!
 
@@ -74,10 +75,27 @@ export function Pricing({ planHref, title, id = 'pricing' }: Props) {
           ))}
         </div>
 
-        <p className="mt-5 flex items-center gap-2 font-mono text-xs text-smoke">
-          <span className="size-1.5 shrink-0 bg-iris" aria-hidden />
-          {pricing.dialogNote}
-        </p>
+        <div className="mt-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+          <p className="flex items-center gap-2 font-mono text-xs text-smoke">
+            <span className="size-1.5 shrink-0 bg-iris" aria-hidden />
+            {pricing.dialogNote}
+          </p>
+          {/* Настройка под ключ — отдельная опция, а не часть тарифа */}
+          <a
+            href={setupHref}
+            target="_blank"
+            rel="noreferrer"
+            className="group notch inline-flex shrink-0 items-center gap-3 self-start bg-white/5 py-2 pr-2 pl-4 text-sm ring-1 ring-inset ring-white/15 transition-colors [--notch:10px] hover:bg-white/10 lg:self-auto"
+          >
+            <span className="text-bone">
+              {pricing.setup.text} <b className="font-semibold whitespace-nowrap text-paper">{pricing.setup.price}</b>
+            </span>
+            <span className="inline-flex h-8 items-center gap-1.5 bg-paper px-3 font-display text-xs font-semibold text-ink transition-colors group-hover:bg-white">
+              {pricing.setup.cta}
+              <Arrow className="size-3.5 transition-transform group-hover:translate-x-0.5" />
+            </span>
+          </a>
+        </div>
       </Container>
     </section>
   )
@@ -166,7 +184,6 @@ function PlanCard({
         >
           {isTest ? pricing.trialCta : pricing.cta}
         </Button>
-        <p className={cx('mt-3 text-center font-mono text-[11px]', light ? 'text-ink/50' : 'text-smoke')}>{pricing.setup}</p>
       </div>
     </article>
   )

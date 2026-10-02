@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Footer, MobileCta } from '../components/landing/Closing'
 import { Header } from '../components/landing/Header'
 import { Ticker } from '../components/landing/HowItWorks'
+import { Cases } from '../components/v2/Cases'
 import { Faq } from '../components/v2/Faq'
 import { FinalCta } from '../components/v2/FinalCta'
 import { Hero } from '../components/v2/Hero'
@@ -38,7 +39,8 @@ export default function Landing() {
         <Ticker />
         <Modules tab={tab} onTab={setTab} trialHref={moduleTrialHref} />
         <Screens />
-        <Pricing planHref={planHref} />
+        <Cases />
+        <Pricing planHref={planHref} setupHref={tgLink(contact, msg.setup)} />
         <Faq />
         <FinalCta trialHref={trialHref} consultHref={consultHref} />
       </main>
