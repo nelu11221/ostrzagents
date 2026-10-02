@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { ru } from '../../content/ru'
 import { Button, Container, Logo, TelegramIcon, cx } from '../ui/primitives'
+import { SmartLink } from '../ui/SmartLink'
 
 type NavItem = { href: string; label: string }
 
@@ -37,17 +38,17 @@ export function Header({
       )}
     >
       <Container className="flex h-16 items-center justify-between gap-6 lg:h-[72px]">
-        <a href="#top" onClick={() => setOpen(false)} aria-label="OSTRO AI — наверх">
+        <SmartLink href="/#top" onClick={() => setOpen(false)} aria-label="OSTRO AI — наверх">
           <Logo />
-        </a>
+        </SmartLink>
 
         <nav aria-label="Основная навигация" className="hidden lg:block">
           <ul className="flex items-center gap-8">
             {nav.map((item) => (
               <li key={item.href}>
-                <a href={item.href} className="text-sm text-bone transition-colors hover:text-paper">
+                <SmartLink href={item.href} className="text-sm text-bone transition-colors hover:text-paper">
                   {item.label}
-                </a>
+                </SmartLink>
               </li>
             ))}
           </ul>
@@ -89,14 +90,14 @@ export function Header({
           <ul className="space-y-1">
             {nav.map((item) => (
               <li key={item.href}>
-                <a
+                <SmartLink
                   href={item.href}
                   onClick={() => setOpen(false)}
                   className="flex items-center justify-between border-b border-white/10 py-4 font-display text-2xl font-semibold"
                 >
                   {item.label}
                   <span className="font-mono text-xs text-smoke">→</span>
-                </a>
+                </SmartLink>
               </li>
             ))}
           </ul>

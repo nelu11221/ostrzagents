@@ -3,7 +3,7 @@ import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 // three.js (~130 КБ gzip) грузится отдельным чанком и только когда секция рядом с экраном
 const PixelBlast = lazy(() => import('./PixelBlast.jsx'))
 
-type Props = { className?: string; density?: number; opacity?: number }
+type Props = { className?: string; density?: number; opacity?: number; color?: string }
 type Mode = 'pending' | 'webgl' | 'static' | 'css'
 
 function hasWebGL2() {
@@ -18,7 +18,7 @@ function hasWebGL2() {
 // webgl — анимированный PixelBlast; static — тот же рисунок без движения (prefers-reduced-motion);
 // css — запасной пиксельный узор, если WebGL недоступен (отключено аппаратное ускорение и т.п.).
 // Текущий режим виден в атрибуте data-pixel — удобно для диагностики.
-export function PixelBg({ className = '', density = 1, opacity = 0.55 }: Props) {
+export function PixelBg({ className = '', density = 1, opacity = 0.55, color = '#3374ff' }: Props) {
   const ref = useRef<HTMLDivElement>(null)
   const [mode, setMode] = useState<Mode>('pending')
   const [near, setNear] = useState(false)
@@ -55,7 +55,7 @@ export function PixelBg({ className = '', density = 1, opacity = 0.55 }: Props) 
             className=""
             style={undefined}
             variant="square"
-            color="#3374ff"
+            color={color}
             pixelSize={mobile ? 5 : 4}
             patternScale={2.5}
             patternDensity={density}

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { ru } from '../../content/ru'
 import { Button, Container, Logo, Reveal, TelegramIcon, cx } from '../ui/primitives'
+import { SmartLink } from '../ui/SmartLink'
 
 const year = new Date().getFullYear()
 
@@ -45,9 +46,9 @@ export function Footer({ contact, nav = ru.nav }: { contact: string; nav?: { hre
 
           <FooterCol title={f.navTitle}>
             {nav.map((n) => (
-              <a key={n.href} href={n.href} className="hover:text-paper">
+              <SmartLink key={n.href} href={n.href} className="hover:text-paper">
                 {n.label}
-              </a>
+              </SmartLink>
             ))}
           </FooterCol>
 

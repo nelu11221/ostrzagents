@@ -13,6 +13,10 @@ type Props = {
   status: Status
   onRetry: () => void
   planHref: (plan: Plan, period: string) => string
+  // Для страниц продуктов: показать только эти тарифы и свой заголовок
+  ids?: string[]
+  title?: string
+  sectionId?: string
 }
 
 // Цвет карточки по составу тарифа: отдельные модули — свой цвет, связки — градиент.
@@ -20,11 +24,12 @@ const PLAN_TONE: Record<string, ProductTone> = { leadgen: 'leadgen', sales: 'sal
 const toneOf = (plan: Plan): ProductTone => PLAN_TONE[plan.id] ?? 'duo'
 
 // Все тарифы в одном месте: срок, тест и сравнение «отдельно vs вместе» — без прыжков по странице.
-export function Pricing({ plans, status, onRetry, planHref }: Props) {
+export function Pricing({ plans: allPlans, status, onRetry, planHref, ids, title, sectionId = 'pricing' }: Props) {
   const p = v2.pricing
+  const plans = ids ? allPlans.filter((plan) => ids.includes(plan.id)) : allPlans
   const [months, setMonths] = useState<Months>(1)
   const [trial, setTrial] = useState(false)
-  const separateSum = ['leadgen', 'sales'].reduce((sum, id) => sum + (plans.find((x) => x.id === id)?.price ?? 0), 0)
+  const separateSum = ['leadgen', 'sales'].reduce((sum, id) => sum + (allPlans.find((x) => x.id === id)?.price ?? 0), 0)
 
   const segment = (active: boolean) =>
     cx(
@@ -33,14 +38,14 @@ export function Pricing({ plans, status, onRetry, planHref }: Props) {
     )
 
   return (
-    <section id="pricing" className="grain relative overflow-hidden border-t border-white/10 py-24 lg:py-32">
+    <section id={sectionId} className="grain relative overflow-hidden border-t border-white/10 py-24 lg:py-32">
       <div className="absolute -bottom-40 -left-40 size-[560px] rounded-full bg-signal/20 blur-[140px]" aria-hidden />
       <div className="absolute -right-40 -bottom-40 size-[560px] rounded-full bg-iris/20 blur-[140px]" aria-hidden />
       <PixelBg className="[mask-image:linear-gradient(to_top,black,transparent_55%)]" opacity={0.4} density={0.9} />
 
       <Container className="pointer-events-none relative z-10 [&_a]:pointer-events-auto [&_button]:pointer-events-auto">
         <div className="flex flex-col gap-10">
-          <SectionHead label={p.label} title={p.title} dot="bg-linear-to-br from-signal to-iris" />
+          <SectionHead label={p.label} title={title ?? p.title} dot="bg-linear-to-br from-signal to-iris" />
           <Reveal delay={0.1} className="min-w-0">
             <p className="label mb-3 text-smoke" id="billingLabel">{p.billingLabel}</p>
             <div className="grid grid-cols-2 gap-1 bg-white/5 p-1 ring-1 ring-inset ring-white/10 sm:inline-flex" role="group" aria-labelledby="billingLabel">
@@ -61,9 +66,9 @@ export function Pricing({ plans, status, onRetry, planHref }: Props) {
           </Reveal>
         </div>
 
-        <div className="mt-14 grid gap-4 sm:grid-cols-2 xl:grid-cols-4" aria-live="polite" aria-busy={status === 'loading'}>
+        <div className={cx('mt-14 grid gap-4 sm:grid-cols-2', plans.length === 3 ? 'xl:grid-cols-3' : 'xl:grid-cols-4')} aria-live="polite" aria-busy={status === 'loading'}>
           {status === 'loading' &&
-            Array.from({ length: 4 }, (_, i) => <div key={i} className="notch h-[560px] animate-pulse bg-ink-2 ring-1 ring-inset ring-white/10 [--notch:28px]" aria-hidden />)}
+            Array.from({ length: ids?.length ?? 4 }, (_, i) => <div key={i} className="notch h-[560px] animate-pulse bg-ink-2 ring-1 ring-inset ring-white/10 [--notch:28px]" aria-hidden />)}
           {status === 'error' && (
             <div className="col-span-full flex flex-wrap items-center justify-between gap-4 bg-danger/10 p-6 text-bone ring-1 ring-inset ring-danger/40">
               <p>Не удалось загрузить тарифы.</p>

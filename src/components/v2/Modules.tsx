@@ -1,9 +1,10 @@
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
-import { ru, v2 } from '../../content/ru'
+import { products, ru, v2 } from '../../content/ru'
 import type { Plan } from '../../lib/api'
-import { LeadgenDemo, SalesDemo } from '../landing/Demos'
 import { TONE } from '../landing/theme'
-import { Button, Container, Label, cx } from '../ui/primitives'
+import { Arrow, Button, Check, Container, Label, cx } from '../ui/primitives'
+import { SmartLink } from '../ui/SmartLink'
+import { VideoCard } from '../ui/VideoCard'
 
 export type ModuleTab = 'leadgen' | 'sales'
 
@@ -15,15 +16,16 @@ type Props = {
 }
 
 const CONTENT = { leadgen: ru.leadgen, sales: ru.sales }
-const DEMO = { leadgen: <LeadgenDemo compact />, sales: <SalesDemo compact /> }
 
 // Оба модуля в одной секции на один экран: заголовок и вкладки в одну строку,
-// шаги — горизонтально, демо — компактное. Высота панели фиксирована, чтобы страница не прыгала при переключении.
+// слева — пара фраз о модуле и ссылка на его страницу, справа — видео, где Антон рассказывает о продукте.
+// Высота панели фиксирована, чтобы страница не прыгала при переключении.
 export function Modules({ tab, onTab, plans, trialHref }: Props) {
   const m = v2.modules
   const reduce = useReducedMotion()
   const t = TONE[tab]
   const content = CONTENT[tab]
+  const product = products[tab]
   const price = plans.find((p) => p.id === tab)?.price
 
   return (
@@ -79,26 +81,34 @@ export function Modules({ tab, onTab, plans, trialHref }: Props) {
               <h3 className="mt-3 font-display text-[clamp(1.4rem,2.2vw,1.9rem)] leading-tight font-semibold tracking-[-0.03em] text-balance">
                 {content.title}
               </h3>
-              <p className="mt-3 max-w-xl leading-relaxed text-bone">{content.sub}</p>
+              <p className="mt-3 max-w-xl leading-relaxed text-bone">{product.short}</p>
 
-              <ol className="mt-7 grid gap-px bg-white/10 ring-1 ring-white/10 sm:grid-cols-3">
-                {content.steps.map((step, i) => (
-                  <li key={step.title} className="bg-ink p-4">
-                    <span className={cx('grid size-7 place-items-center font-mono text-[11px] text-white', t.solid)}>0{i + 1}</span>
-                    <p className="mt-3 font-display text-sm font-semibold tracking-tight">{step.title}</p>
-                    <p className="mt-1 text-xs leading-relaxed text-smoke">{step.text}</p>
+              <ul className="mt-6 grid gap-3 border-t border-white/10 pt-6">
+                {product.shortPoints.map((point) => (
+                  <li key={point} className="flex gap-3 text-sm leading-snug">
+                    <Check className={cx('size-4', t.text)} />
+                    {point}
                   </li>
                 ))}
-              </ol>
+              </ul>
 
-              <div className="mt-7 flex flex-col gap-4 sm:flex-row sm:items-center">
-                <Button href={trialHref(tab)} target="_blank" rel="noreferrer" variant={t.button}>
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+                <Button href={trialHref(tab)} target="_blank" rel="noreferrer" variant={t.button} className="whitespace-nowrap">
                   {m.trialCta}
                 </Button>
-                {price !== undefined && <span className="font-mono text-xs text-smoke">{m.priceFrom(price)}</span>}
+                <SmartLink
+                  href={product.path}
+                  className="group inline-flex h-12 items-center gap-2 px-2 font-display text-sm font-semibold whitespace-nowrap text-paper transition-colors hover:text-white"
+                >
+                  {products.page.more(product.name)}
+                  <Arrow className="transition-transform group-hover:translate-x-1" />
+                </SmartLink>
               </div>
+              {price !== undefined && <p className="mt-4 font-mono text-xs text-smoke">{m.priceFrom(price)}</p>}
             </div>
-            <div className="min-w-0">{DEMO[tab]}</div>
+            <div className="min-w-0">
+              <VideoCard {...product.video} accent={t.solid} ring={t.ring} />
+            </div>
           </motion.div>
         </AnimatePresence>
       </Container>

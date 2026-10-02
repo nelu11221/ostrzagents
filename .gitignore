@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+.netlify
+
+# Исходники видео (190+ МБ) — в git не храним, веб-версии лежат в public/media
+/video/
