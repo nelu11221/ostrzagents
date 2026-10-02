@@ -71,7 +71,7 @@ export function WatchButton({ product, label, className }: { product: ProductId;
           </svg>
         </span>
         <span className="font-display text-sm font-semibold tracking-tight">
-          {label ?? `Как выглядит ${p.name}`}
+          {label ?? p.demoLabel}
           <span className="ml-2 font-mono text-xs font-normal text-smoke">{p.video.duration}</span>
         </span>
       </button>

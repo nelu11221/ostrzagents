@@ -37,15 +37,15 @@ export function VideoCard({ src, poster, title, duration, accent, ring, classNam
           aria-label={`${title} — смотреть видео, ${duration}`}
         >
           <img src={poster} alt="" loading="lazy" className="size-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]" />
-          {/* Постер — готовая обложка со своим текстом: ничего не пишем поверх, только кнопка и длительность по углам */}
-          <span className="absolute inset-x-0 bottom-0 h-1/4 bg-linear-to-t from-ink/70 to-transparent" />
+          {/* Постер — готовая обложка со своим текстом: поверх только крупная кнопка Play по центру и длительность */}
+          <span className="absolute inset-0 bg-ink/10 transition-colors duration-300 group-hover:bg-ink/0" />
           <span
             className={cx(
-              'absolute bottom-3 left-3 grid size-11 place-items-center rounded-full text-white shadow-[0_12px_30px_-8px_rgba(0,0,0,.7)] ring-2 ring-white/30 transition-transform duration-300 group-hover:scale-110 sm:bottom-4 sm:left-4 sm:size-12',
+              'absolute top-1/2 left-1/2 grid size-16 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full text-white shadow-[0_20px_50px_-10px_rgba(0,0,0,.8)] ring-4 ring-white/25 transition-transform duration-300 group-hover:scale-110 sm:size-20',
               accent,
             )}
           >
-            <svg viewBox="0 0 24 24" className="ml-0.5 size-5" fill="currentColor" aria-hidden>
+            <svg viewBox="0 0 24 24" className="ml-1 size-7 sm:size-8" fill="currentColor" aria-hidden>
               <path d="M7 4.5v15L20 12Z" />
             </svg>
           </span>
