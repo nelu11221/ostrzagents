@@ -8,8 +8,7 @@ import { FinalCta } from '../components/v2/FinalCta'
 import { Hero } from '../components/v2/Hero'
 import { Modules, type ModuleTab } from '../components/v2/Modules'
 import { Pricing } from '../components/v2/Pricing'
-import { Screens } from '../components/v2/Screens'
-import { v2 } from '../content/ru'
+import { cases, v2 } from '../content/ru'
 import { usePublicConfig } from '../lib/usePublicConfig'
 import { tgLink } from '../lib/contact'
 
@@ -38,8 +37,10 @@ export default function Landing() {
         <Hero trialHref={trialHref} />
         <Ticker />
         <Modules tab={tab} onTab={setTab} trialHref={moduleTrialHref} />
-        <Screens />
-        <Cases />
+        <Cases
+          ctaHref={(name) => tgLink(contact, cases.ctaMessage(name))}
+          trialHref={(id) => moduleTrialHref(id)}
+        />
         <Pricing planHref={planHref} setupHref={tgLink(contact, msg.setup)} />
         <Faq />
         <FinalCta trialHref={trialHref} consultHref={consultHref} />

@@ -2,6 +2,7 @@ import type { ReactNode } from 'react'
 import { v2 } from '../../content/ru'
 import { PixelBg } from '../effects/PixelBg'
 import { Button, Container, cx } from '../ui/primitives'
+import { WatchButton } from '../ui/VideoModal'
 
 // Hero v2: центрированный заголовок на всю ширину + горизонтальный «конвейер» продукта под ним:
 // чаты (синий, Лидоген) → AI-фильтр → личка (фиолетовый, AI-сейлз).
@@ -13,7 +14,7 @@ export function Hero({ trialHref }: { trialHref: string }) {
       <PixelBg className="[mask-image:radial-gradient(ellipse_48%_36%_at_50%_30%,transparent_40%,black_100%)]" opacity={0.75} />
 
       {/* pointer-events пропускаются к пиксельному фону (ripple по клику), кроме кнопок и ссылок */}
-      <Container className="pointer-events-none relative z-10 [&_a]:pointer-events-auto">
+      <Container className="pointer-events-none relative z-10 [&_a]:pointer-events-auto [&_button]:pointer-events-auto">
         <div className="mx-auto max-w-5xl text-center">
           <p
             style={{ animationDelay: '0s' }}
@@ -55,6 +56,11 @@ export function Hero({ trialHref }: { trialHref: string }) {
 
         <div style={{ animationDelay: '0.5s' }} className="animate-rise mt-16 sm:mt-20">
           <Pipeline />
+          {/* Как это выглядит — ролики Антона открываются поверх страницы */}
+          <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
+            <WatchButton product="leadgen" className="bg-ink/70 backdrop-blur-sm" />
+            <WatchButton product="sales" className="bg-ink/70 backdrop-blur-sm" />
+          </div>
         </div>
       </Container>
     </section>
