@@ -10,8 +10,7 @@ import { VideoCard } from '../components/ui/VideoCard'
 import { Faq } from '../components/v2/Faq'
 import { FinalCta } from '../components/v2/FinalCta'
 import { Pricing } from '../components/v2/Pricing'
-import { products, v2 } from '../content/ru'
-import type { Plan } from '../lib/api'
+import { pricing, products, v2 } from '../content/ru'
 import { tgLink } from '../lib/contact'
 import { usePublicConfig } from '../lib/usePublicConfig'
 
@@ -27,7 +26,7 @@ export default function ProductPage({ id }: { id: ProductId }) {
   const otherId: ProductId = id === 'leadgen' ? 'sales' : 'leadgen'
   const page = products.page
   const t = TONE[id]
-  const { contact, plans, status, retry } = usePublicConfig()
+  const { contact } = usePublicConfig()
 
   useEffect(() => {
     const previous = document.title
@@ -38,8 +37,8 @@ export default function ProductPage({ id }: { id: ProductId }) {
   const msg = v2.messages
   const trialHref = tgLink(contact, id === 'leadgen' ? msg.trialLeadgen : msg.trialSales)
   const consultHref = tgLink(contact, msg.consult)
-  const planHref = (plan: Plan, period: string) => tgLink(contact, msg.plan(plan.name, period))
-  const price = plans.find((p) => p.id === id)?.price
+  const planHref = (name: string, period: string) => tgLink(contact, msg.plan(name, period))
+  const plan = pricing.plans.find((p) => p.id === id)!
 
   return (
     <>
@@ -77,11 +76,9 @@ export default function ProductPage({ id }: { id: ProductId }) {
                   Тарифы
                 </Button>
               </div>
-              {price !== undefined && (
-                <p style={{ animationDelay: '0.3s' }} className="animate-rise label mt-5 text-smoke">
-                  Тариф от ${price} в месяц · тест на 1 день — $15
-                </p>
-              )}
+              <p style={{ animationDelay: '0.3s' }} className="animate-rise label mt-5 text-smoke">
+                ${plan.month} в месяц · тест на 3 дня — ${plan.test}
+              </p>
             </div>
             <div style={{ animationDelay: '0.36s' }} className="animate-rise relative min-w-0">
               <div className={cx('absolute inset-x-8 inset-y-6 blur-3xl', t.glow)} aria-hidden />
@@ -122,14 +119,7 @@ export default function ProductPage({ id }: { id: ProductId }) {
           </Container>
         </section>
 
-        <Pricing
-          plans={plans}
-          status={status}
-          onRetry={retry}
-          planHref={planHref}
-          ids={[id, 'bundle', 'scale']}
-          title={page.pricingTitle}
-        />
+        <Pricing planHref={planHref} title={page.pricingTitle} />
 
         <Faq items={product.faq} title={page.faqTitle} />
 

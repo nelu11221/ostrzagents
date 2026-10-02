@@ -1,5 +1,5 @@
 import { ru } from '../../content/ru'
-import { Container, Reveal, SectionHead } from '../ui/primitives'
+import { Container, LogoMark, Reveal, SectionHead } from '../ui/primitives'
 
 export function Ticker() {
   const items = [...ru.ticker, ...ru.ticker]
@@ -9,9 +9,7 @@ export function Ticker() {
         {items.map((t, i) => (
           <span key={i} className="flex items-center gap-8 font-display text-sm font-semibold tracking-tight uppercase sm:text-base">
             {t}
-            <svg viewBox="0 0 24 24" className="size-3.5" aria-hidden>
-              <path d="M12 1 23 23H15.5L12 15.5 8.5 23H1Z" fill="currentColor" />
-            </svg>
+            <LogoMark mono className="size-4" />
           </span>
         ))}
       </div>

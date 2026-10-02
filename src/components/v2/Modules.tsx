@@ -1,6 +1,5 @@
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
-import { products, ru, v2 } from '../../content/ru'
-import type { Plan } from '../../lib/api'
+import { pricing, products, ru, v2 } from '../../content/ru'
 import { TONE } from '../landing/theme'
 import { Arrow, Button, Check, Container, Label, cx } from '../ui/primitives'
 import { SmartLink } from '../ui/SmartLink'
@@ -11,7 +10,6 @@ export type ModuleTab = 'leadgen' | 'sales'
 type Props = {
   tab: ModuleTab
   onTab: (tab: ModuleTab) => void
-  plans: Plan[]
   trialHref: (tab: ModuleTab) => string
 }
 
@@ -20,13 +18,13 @@ const CONTENT = { leadgen: ru.leadgen, sales: ru.sales }
 // Оба модуля в одной секции на один экран: заголовок и вкладки в одну строку,
 // слева — пара фраз о модуле и ссылка на его страницу, справа — видео, где Антон рассказывает о продукте.
 // Высота панели фиксирована, чтобы страница не прыгала при переключении.
-export function Modules({ tab, onTab, plans, trialHref }: Props) {
+export function Modules({ tab, onTab, trialHref }: Props) {
   const m = v2.modules
   const reduce = useReducedMotion()
   const t = TONE[tab]
   const content = CONTENT[tab]
   const product = products[tab]
-  const price = plans.find((p) => p.id === tab)?.price
+  const price = pricing.plans.find((p) => p.id === tab)?.month
 
   return (
     <section id="modules" className="relative flex scroll-mt-16 flex-col justify-center overflow-hidden border-t border-white/10 py-16 lg:min-h-[calc(100svh-72px)] lg:py-14">

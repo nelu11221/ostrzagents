@@ -123,11 +123,23 @@ export function Container({ children, className }: { children: ReactNode; classN
 export function Logo({ className }: { className?: string }) {
   return (
     <span className={cx('inline-flex items-center gap-2 font-display text-lg font-bold tracking-[-0.04em]', className)}>
-      <svg viewBox="0 0 24 24" className="size-6 text-signal" aria-hidden>
-        <path d="M12 1 23 23H15.5L12 15.5 8.5 23H1Z" fill="currentColor" />
-      </svg>
+      <LogoMark className="size-7" />
       OSTRO<span className="text-signal">AI</span>
     </span>
+  )
+}
+
+// Знак OSTRO AI: синий квадрат с «О». Тот же, что public/logo.svg (фавикон).
+export function LogoMark({ className, mono }: { className?: string; mono?: boolean }) {
+  return (
+    <svg viewBox="0 0 64 64" className={cx('shrink-0', className)} aria-hidden>
+      {!mono && <rect width="64" height="64" rx="14" fill="#2433C4" />}
+      <g transform="translate(32 32) scale(1.0476190476190477) translate(-30 -36)" fill={mono ? 'currentColor' : '#fff'}>
+        <circle cx="26" cy="34" r="13.5" fill="none" stroke={mono ? 'currentColor' : '#fff'} strokeWidth="7" />
+        <path d="M41.6 28.32 Q44.5 40 51 55 Q42 51 33.79 48.66 A16.6 16.6 0 0 0 41.6 28.32 Z" />
+        <circle cx="26" cy="34" r="4.5" />
+      </g>
+    </svg>
   )
 }
 
