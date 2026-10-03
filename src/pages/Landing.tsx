@@ -46,7 +46,7 @@ export default function Landing() {
         <FinalCta trialHref={trialHref} consultHref={consultHref} />
       </main>
       <Footer contact={contact} nav={v2.nav} />
-      <MobileCta contactUrl={trialHref} label={v2.mobileCta} />
+      <MobileCta contactUrl={trialHref} label={v2.mobileCta} showIn="faq" />
     </>
   )
 }

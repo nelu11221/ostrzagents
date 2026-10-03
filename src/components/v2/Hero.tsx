@@ -8,7 +8,7 @@ import { Button, Container, cx } from '../ui/primitives'
 export function Hero({ trialHref }: { trialHref: string }) {
   const h = v2.hero
   return (
-    <section id="top" className="grain relative overflow-hidden pt-28 pb-20 sm:pt-36 lg:pb-28">
+    <section id="top" className="grain relative overflow-hidden pt-24 pb-10 sm:pt-36 sm:pb-20 lg:pb-28">
       <div className="absolute -top-72 left-1/2 h-[680px] w-[1200px] -translate-x-1/2 rounded-full bg-linear-to-r from-signal/35 to-iris/30 blur-[160px]" aria-hidden />
       <PixelBg className="[mask-image:radial-gradient(ellipse_48%_36%_at_50%_30%,transparent_40%,black_100%)]" opacity={0.75} />
 
@@ -26,7 +26,7 @@ export function Hero({ trialHref }: { trialHref: string }) {
             {h.eyebrow}
           </p>
 
-          <h1 className="mt-8 font-display text-[clamp(2.1rem,5.6vw,5rem)] leading-[1.02] font-bold tracking-[-0.045em] text-balance">
+          <h1 className="mt-6 font-display text-[1.8rem] sm:mt-8 sm:text-[clamp(2rem,5.6vw,5rem)] leading-[1.02] font-bold tracking-[-0.045em] text-balance">
             <span style={{ animationDelay: '0.08s' }} className="animate-rise block">{h.titleA}</span>
             <span style={{ animationDelay: '0.16s' }} className="animate-rise block">
               {h.titleB}{' '}
@@ -36,24 +36,24 @@ export function Hero({ trialHref }: { trialHref: string }) {
             </span>
           </h1>
 
-          <p style={{ animationDelay: '0.26s' }} className="animate-rise mx-auto mt-7 max-w-2xl text-lg leading-relaxed text-bone">
+          <p style={{ animationDelay: '0.26s' }} className="animate-rise mx-auto mt-5 max-w-2xl text-base leading-relaxed text-bone sm:mt-7 sm:text-lg">
             {h.sub}
           </p>
 
-          <div style={{ animationDelay: '0.34s' }} className="animate-rise mt-9 flex flex-col justify-center gap-3 sm:flex-row">
+          <div style={{ animationDelay: '0.34s' }} className="animate-rise mt-7 flex flex-col justify-center gap-3 sm:mt-9 sm:flex-row">
             <Button href={trialHref} target="_blank" rel="noreferrer" size="lg" variant="duo">
               {h.cta}
             </Button>
-            <Button href="#modules" variant="ghost" size="lg">
+            <Button href="#modules" variant="ghost" size="lg" className="max-sm:hidden">
               {h.secondary}
             </Button>
           </div>
-          <p style={{ animationDelay: '0.4s' }} className="animate-rise label mt-5 text-smoke">
+          <p style={{ animationDelay: '0.4s' }} className="animate-rise label mt-4 text-smoke sm:mt-5">
             {h.note}
           </p>
         </div>
 
-        <div style={{ animationDelay: '0.5s' }} className="animate-rise mt-16 sm:mt-20">
+        <div style={{ animationDelay: '0.5s' }} className="animate-rise mt-8 max-sm:hidden sm:mt-20">
           <Pipeline />
         </div>
       </Container>
@@ -95,11 +95,11 @@ function Stage({
   children: ReactNode
 }) {
   return (
-    <div className={cx('notch flex h-[300px] min-w-0 flex-col bg-ink-2/90 ring-1 ring-inset backdrop-blur-sm [--notch:22px]', ring)}>
-      <div className="flex items-center gap-2.5 border-b border-white/10 px-5 py-3.5 font-mono text-xs">
+    <div className={cx('notch flex h-[220px] w-[84%] min-w-0 shrink-0 snap-center flex-col bg-ink-2/90 ring-1 ring-inset backdrop-blur-sm [--notch:22px] sm:h-[300px] lg:w-auto', ring)}>
+      <div className="flex items-center gap-2.5 border-b border-white/10 px-5 py-3 font-mono text-xs sm:py-3.5">
         <span className={cx('size-1.5 animate-rec', dot)} aria-hidden />
-        <span className="text-paper">{label}</span>
-        <span className="truncate text-smoke">· {meta}</span>
+        <span className="whitespace-nowrap text-paper">{label}</span>
+        <span className="truncate text-smoke max-sm:hidden">· {meta}</span>
         <span className="ml-auto pr-3 text-smoke">/{n}</span>
       </div>
       <div className="relative min-h-0 flex-1 overflow-hidden">{children}</div>
@@ -121,7 +121,7 @@ function Pipeline() {
   const stream = [...STREAM, ...STREAM]
   return (
     <div
-      className="grid gap-3 lg:grid-cols-[1fr_auto_1fr_auto_1fr] lg:gap-0"
+      className="pointer-events-auto -mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-2 [scrollbar-width:none] lg:mx-0 lg:grid lg:grid-cols-[1fr_auto_1fr_auto_1fr] lg:gap-0 lg:overflow-visible lg:px-0 lg:pb-0"
       role="img"
       aria-label="Как работает OSTRO AI: сообщения из Telegram-чатов проходят AI-фильтр, а найденным клиентам AI-сейлз отвечает в личке"
     >
@@ -147,16 +147,16 @@ function Pipeline() {
 
       {/* 2. AI-фильтр: воронка отбора */}
       <Stage n="02" label={p.filter.label} meta={p.filter.meta} dot="bg-linear-to-r from-signal-hot to-iris-hot" ring="ring-white/15">
-        <div className="flex h-full flex-col justify-center gap-5 px-5 py-5">
+        <div className="flex h-full flex-col justify-center gap-2 px-5 py-3 sm:gap-5 sm:py-5">
           {p.funnel.map((row, i) => {
             const last = i === p.funnel.length - 1
             return (
               <div key={row.label}>
                 <div className="flex items-baseline justify-between gap-3">
-                  <span className={cx('font-display font-bold tracking-tight tabular-nums', last ? 'text-3xl' : 'text-xl text-bone')}>{row.value}</span>
+                  <span className={cx('font-display font-bold tracking-tight tabular-nums', last ? 'text-2xl sm:text-3xl' : 'text-lg text-bone sm:text-xl')}>{row.value}</span>
                   <span className="font-mono text-[11px] text-smoke">{row.label}</span>
                 </div>
-                <span className="mt-2 block h-1.5 bg-white/10">
+                <span className="mt-1.5 block h-1.5 bg-white/10 sm:mt-2">
                   <span className={cx('block h-full', last ? 'bg-linear-to-r from-signal to-iris' : 'bg-signal/60')} style={{ width: row.width }} />
                 </span>
               </div>
@@ -177,14 +177,14 @@ function Pipeline() {
 
       {/* 3. Диалог в личке: отвечает AI-сейлз (фиолетовый) */}
       <Stage n="03" label={p.dm.label} meta={p.dm.meta} dot="bg-iris-hot" ring="ring-iris/35">
-        <div className="flex h-full flex-col justify-end gap-3 px-5 py-5">
+        <div className="flex h-full flex-col justify-end gap-2 px-5 py-3 sm:gap-3 sm:py-5">
           {p.dialog.map((m, i) => {
             const ai = m.from === 'ai'
             return (
               <div key={i} className={cx('flex', ai ? 'justify-end' : 'justify-start')}>
                 <p
                   className={cx(
-                    'max-w-[88%] px-3.5 py-2.5 text-sm leading-snug',
+                    'max-w-[88%] px-3 py-2 text-[13px] leading-snug sm:px-3.5 sm:py-2.5 sm:text-sm',
                     ai ? 'notch bg-iris-btn text-white [--notch:9px]' : 'notch-bl bg-white/[0.07] text-paper [--notch:9px]',
                   )}
                 >

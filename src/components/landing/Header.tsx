@@ -17,10 +17,20 @@ export function Header({
   nav?: NavItem[]
 }) {
   const [scrolled, setScrolled] = useState(false)
+  const [hiddenOnScroll, setHiddenOnScroll] = useState(false)
   const [open, setOpen] = useState(false)
 
+  // На мобильном шапка прячется при скролле вниз и возвращается при скролле вверх — экран целиком под контент
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24)
+    let lastY = window.scrollY
+    const onScroll = () => {
+      const y = window.scrollY
+      setScrolled(y > 24)
+      if (Math.abs(y - lastY) > 6) {
+        setHiddenOnScroll(y > lastY && y > 80)
+        lastY = y
+      }
+    }
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
@@ -33,8 +43,9 @@ export function Header({
   return (
     <header
       className={cx(
-        'fixed inset-x-0 top-0 z-50 transition-[background-color,border-color] duration-300',
+        'fixed inset-x-0 top-0 z-50 transition-[background-color,border-color,translate] duration-300',
         scrolled || open ? 'border-b border-white/10 bg-ink/85 backdrop-blur-md' : 'border-b border-transparent',
+        hiddenOnScroll && !open && 'max-lg:-translate-y-full',
       )}
     >
       <Container className="flex h-16 items-center justify-between gap-6 lg:h-[72px]">

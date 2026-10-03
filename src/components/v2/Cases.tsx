@@ -25,10 +25,10 @@ export function Cases({ ctaHref, trialHref }: Props) {
   const active = list[activeByProduct[product]] ?? list[0]
 
   return (
-    <section id="cases" className="relative overflow-hidden border-t border-white/10 bg-ink-2 py-24 lg:py-28">
+    <section id="cases" className="relative overflow-hidden border-t border-white/10 bg-ink-2 py-6 sm:py-24 lg:py-28">
       <Container>
-        <div className="flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
-          <SectionHead label={c.label} title={c.title} sub={c.sub} dot="bg-linear-to-br from-signal to-iris" />
+        <div className="flex flex-col justify-between gap-3 sm:gap-8 lg:flex-row lg:items-end">
+          <SectionHead label={c.label} title={c.title} sub={c.sub} dot="bg-linear-to-br from-signal to-iris" className="max-sm:[&_h2]:hidden max-sm:[&_h2+p]:hidden" />
           {/* Уровень 1: модуль */}
           <div className="grid shrink-0 grid-cols-2 gap-1 bg-white/5 p-1 ring-1 ring-inset ring-white/10" role="tablist" aria-label="Модуль">
             {(['leadgen', 'sales'] as const).map((id) => {
@@ -42,7 +42,7 @@ export function Cases({ ctaHref, trialHref }: Props) {
                   aria-selected={selected}
                   onClick={() => setProduct(id)}
                   className={cx(
-                    'flex h-12 items-center justify-center gap-2.5 px-6 font-display text-sm font-semibold transition-colors',
+                    'flex h-11 items-center justify-center gap-2.5 px-4 font-display text-sm font-semibold transition-colors sm:h-12 sm:px-6',
                     selected ? cx(TONE[id].solid, 'text-white') : 'text-bone hover:text-paper',
                   )}
                 >
@@ -57,7 +57,7 @@ export function Cases({ ctaHref, trialHref }: Props) {
 
         {/* Уровень 2: проекты внутри модуля */}
         {list.length > 1 && (
-          <div role="tablist" aria-label="Проекты" className="-mx-4 mt-10 flex gap-2 overflow-x-auto px-4 pb-2 sm:mx-0 sm:flex-wrap sm:px-0">
+          <div role="tablist" aria-label="Проекты" className="-mx-4 mt-3 flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] sm:mx-0 sm:mt-10 sm:flex-wrap sm:px-0 sm:pb-2">
             {list.map((item, i) => {
               const selected = item.id === active?.id
               return (
@@ -68,7 +68,7 @@ export function Cases({ ctaHref, trialHref }: Props) {
                   aria-selected={selected}
                   onClick={() => setActiveByProduct((prev) => ({ ...prev, [product]: i }))}
                   className={cx(
-                    'flex shrink-0 items-baseline gap-2 px-3.5 py-3 text-left transition-colors',
+                    'flex shrink-0 items-baseline gap-2 px-3 py-2.5 text-left transition-colors sm:px-3.5 sm:py-3',
                     selected ? cx(TONE[product].solid, 'text-white') : 'bg-white/5 text-bone hover:bg-white/10 hover:text-paper',
                   )}
                 >
@@ -80,7 +80,7 @@ export function Cases({ ctaHref, trialHref }: Props) {
           </div>
         )}
 
-        <div className={list.length > 1 ? 'mt-6' : 'mt-10'}>
+        <div className={list.length > 1 ? 'mt-3 sm:mt-6' : 'mt-5 sm:mt-10'}>
           <AnimatePresence mode="wait" initial={false}>
             <motion.div
               key={active ? active.id : `empty-${product}`}
@@ -113,9 +113,9 @@ function CaseCard({ item, ctaHref }: { item: CaseStudy; ctaHref: string }) {
 
   return (
     <article className="notch grid overflow-hidden bg-ink [--notch:32px] lg:grid-cols-[1.1fr_0.9fr]">
-      <div className="flex flex-col p-6 sm:p-10 lg:p-12">
-        <p className="label text-smoke">{item.tag}</p>
-        <h3 className="mt-3 font-display text-2xl font-semibold tracking-tight sm:text-3xl">{item.name}</h3>
+      <div className="flex flex-col p-5 sm:p-10 lg:p-12">
+        <p className="label text-smoke max-sm:hidden">{item.tag}</p>
+        <h3 className="font-display text-xl font-semibold tracking-tight sm:mt-3 sm:text-3xl">{item.name}</h3>
 
         {item.draftStats && showStats && (
           <p className="mt-4 inline-flex w-fit items-center gap-2 bg-danger/15 px-2.5 py-1 font-mono text-[11px] text-danger ring-1 ring-danger/40 ring-inset">
@@ -124,26 +124,26 @@ function CaseCard({ item, ctaHref }: { item: CaseStudy; ctaHref: string }) {
         )}
 
         {headline && (
-          <div className={cx('mt-8 border-l-2 pl-5', item.product === 'sales' ? 'border-iris' : 'border-signal')}>
-            <p className={cx('font-display text-[clamp(3rem,7vw,5rem)] leading-none font-bold tracking-[-0.05em]', tone.text)}>
+          <div className={cx('mt-3 border-l-2 pl-4 sm:mt-8 sm:pl-5', item.product === 'sales' ? 'border-iris' : 'border-signal')}>
+            <p className={cx('font-display text-[2.3rem] leading-none font-bold tracking-[-0.05em] sm:text-[clamp(3rem,7vw,5rem)]', tone.text)}>
               {headline.value}
             </p>
-            <p className="mt-2 text-bone">{headline.label}</p>
+            <p className="mt-1.5 text-sm text-bone sm:mt-2 sm:text-base">{headline.label}</p>
           </div>
         )}
 
         {metrics && (
-          <dl className="mt-8 grid grid-cols-2 gap-px bg-white/10 sm:grid-cols-4">
+          <dl className="mt-3 grid grid-cols-4 gap-px bg-white/10 sm:mt-8">
             {metrics.map((m) => (
-              <div key={m.label} className="bg-ink p-4">
-                <dd className="font-display text-xl font-bold whitespace-nowrap tracking-tight">{m.value}</dd>
-                <dt className="mt-1 text-xs leading-snug text-smoke">{m.label}</dt>
+              <div key={m.label} className="bg-ink px-1.5 py-2.5 sm:p-4">
+                <dd className="font-display text-[13px] font-bold whitespace-nowrap tracking-tight sm:text-xl">{m.value}</dd>
+                <dt className="mt-1 text-[10px] leading-tight text-smoke sm:text-xs sm:leading-snug">{m.label}</dt>
               </div>
             ))}
           </dl>
         )}
 
-        <div className="mt-10 grid gap-8 sm:grid-cols-2">
+        <div className="mt-10 grid gap-8 max-sm:hidden sm:grid-cols-2">
           <div>
             <p className="label text-smoke">{c.goalLabel}</p>
             <p className="mt-3 leading-relaxed text-bone">{item.goal}</p>
@@ -161,16 +161,16 @@ function CaseCard({ item, ctaHref }: { item: CaseStudy; ctaHref: string }) {
           </div>
         </div>
 
-        <div className="mt-auto flex flex-col gap-3 pt-10 sm:flex-row sm:items-center">
-          <Button href={ctaHref} target="_blank" rel="noreferrer" variant={tone.button}>
+        <div className="mt-auto flex items-stretch gap-2 pt-3 sm:items-center sm:gap-3 sm:pt-10">
+          <Button href={ctaHref} target="_blank" rel="noreferrer" variant={tone.button} className="max-sm:flex-1 max-sm:px-3">
             {c.cta}
           </Button>
-          <WatchButton product={item.product} />
+          <WatchButton product={item.product} compact />
         </div>
       </div>
 
       {/* Скрины лидов веером; клик — просмотр поверх страницы */}
-      <div className="relative flex min-h-[460px] flex-col items-center justify-center overflow-hidden px-6 py-12 sm:min-h-[560px]">
+      <div className="relative flex flex-col items-center justify-center overflow-hidden px-6 pt-1 pb-5 sm:min-h-[560px] sm:py-12">
         <div
           className={cx(
             'absolute inset-0',
@@ -181,7 +181,7 @@ function CaseCard({ item, ctaHref }: { item: CaseStudy; ctaHref: string }) {
           aria-hidden
         />
         <div className="grid-lines absolute inset-0 [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_75%)]" aria-hidden />
-        <p className="label relative mb-6 text-smoke">{c.shotsLabel}</p>
+        <p className="label relative mb-6 text-smoke max-sm:hidden">{c.shotsLabel}</p>
         <div className="relative flex items-center justify-center">
           {item.shots.map((shot, i) => {
             const offset = i - (item.shots.length - 1) / 2
@@ -192,7 +192,7 @@ function CaseCard({ item, ctaHref }: { item: CaseStudy; ctaHref: string }) {
                 onClick={() => setOpenShot(i)}
                 aria-label={`${c.shotLabel}: ${shot.alt}`}
                 style={{ transform: `rotate(${offset * 6}deg) translateY(${Math.abs(offset) * 18}px)`, zIndex: offset === 0 ? 2 : 1 }}
-                className="relative -mx-6 w-[36vw] max-w-[190px] shrink-0 cursor-zoom-in overflow-hidden shadow-[0_30px_60px_-20px_rgba(0,0,0,.8)] ring-1 ring-white/15 transition-[translate] duration-300 hover:z-10 hover:-translate-y-3 sm:-mx-8 sm:w-[190px]"
+                className="relative -mx-3 w-[21vw] max-w-[190px] shrink-0 cursor-zoom-in overflow-hidden shadow-[0_30px_60px_-20px_rgba(0,0,0,.8)] ring-1 ring-white/15 transition-[translate] duration-300 hover:z-10 hover:-translate-y-3 sm:-mx-8 sm:w-[190px]"
               >
                 <img src={shot.src} alt={shot.alt} loading="lazy" className="aspect-[9/15] w-full object-cover object-top" />
               </button>

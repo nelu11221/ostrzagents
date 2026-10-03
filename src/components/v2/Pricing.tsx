@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { pricing, type PeriodId } from '../../content/ru'
 import { PixelBg } from '../effects/PixelBg'
 import { TONE } from '../landing/theme'
@@ -29,21 +29,41 @@ type Props = {
 export function Pricing({ planHref, setupHref, title, id = 'pricing' }: Props) {
   const [period, setPeriod] = useState<PeriodId>('month')
   const current = pricing.periods.find((p) => p.id === period)!
+  const cardsRef = useRef<HTMLDivElement>(null)
+  const featuredIndex = pricing.plans.findIndex((p) => 'featured' in p && p.featured)
+  const [activeCard, setActiveCard] = useState(featuredIndex)
+
+  // На мобильном — по одной карточке на экран, листаются свайпом; стартуем со связки
+  const scrollToCard = (index: number, smooth = true) => {
+    const row = cardsRef.current
+    const card = row?.children[index] as HTMLElement | undefined
+    if (!row || !card) return
+    row.scrollTo({ left: card.offsetLeft - row.offsetLeft, behavior: smooth ? 'smooth' : 'instant' })
+  }
+
+  useEffect(() => {
+    const row = cardsRef.current
+    if (!row || row.scrollWidth <= row.clientWidth) return
+    scrollToCard(featuredIndex, false)
+    const onScroll = () => setActiveCard(Math.round(row.scrollLeft / row.clientWidth))
+    row.addEventListener('scroll', onScroll, { passive: true })
+    return () => row.removeEventListener('scroll', onScroll)
+  }, [featuredIndex])
 
   return (
     <section
       id={id}
-      className="grain relative flex scroll-mt-16 flex-col justify-center overflow-hidden border-t border-white/10 py-16 lg:min-h-[calc(100svh-72px)] lg:py-12"
+      className="grain relative flex scroll-mt-16 flex-col justify-center overflow-hidden border-t border-white/10 py-6 sm:py-16 lg:min-h-[calc(100svh-72px)] lg:py-12"
     >
       <div className="absolute -bottom-40 -left-40 size-[560px] rounded-full bg-signal/20 blur-[140px]" aria-hidden />
       <div className="absolute -right-40 -bottom-40 size-[560px] rounded-full bg-iris/20 blur-[140px]" aria-hidden />
       <PixelBg className="[mask-image:linear-gradient(to_top,black,transparent_55%)]" opacity={0.35} density={0.9} />
 
       <Container className="pointer-events-none relative z-10 [&_a]:pointer-events-auto [&_button]:pointer-events-auto">
-        <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
+        <div className="flex flex-col justify-between gap-3 sm:gap-6 md:flex-row md:items-end">
           <div>
-            <Label dot="bg-linear-to-br from-signal to-iris">{pricing.label}</Label>
-            <h2 className="mt-4 font-display text-[clamp(1.7rem,3.2vw,2.6rem)] leading-[1.05] font-semibold tracking-[-0.03em]">
+            <Label dot="bg-linear-to-br from-signal to-iris" className="max-sm:hidden">{pricing.label}</Label>
+            <h2 className="font-display text-[1.35rem] sm:mt-4 sm:text-[clamp(1.5rem,3.2vw,2.6rem)] leading-[1.05] font-semibold tracking-[-0.03em]">
               {title ?? pricing.title}
             </h2>
           </div>
@@ -57,7 +77,7 @@ export function Pricing({ planHref, setupHref, title, id = 'pricing' }: Props) {
                   aria-pressed={active}
                   onClick={() => setPeriod(p.id)}
                   className={cx(
-                    'inline-flex h-11 items-center justify-center gap-2 px-3 text-sm font-medium whitespace-nowrap transition-colors sm:px-5',
+                    'inline-flex h-10 items-center justify-center gap-2 px-2 text-[13px] font-medium whitespace-nowrap transition-colors sm:h-11 sm:px-5 sm:text-sm',
                     active ? 'bg-paper text-ink' : 'text-bone hover:text-paper',
                   )}
                 >
@@ -69,14 +89,30 @@ export function Pricing({ planHref, setupHref, title, id = 'pricing' }: Props) {
           </div>
         </div>
 
-        <div className="mt-8 grid gap-4 md:grid-cols-3 md:items-stretch">
+        <div ref={cardsRef} className="pointer-events-auto mt-3 flex snap-x snap-mandatory overflow-x-auto [scrollbar-width:none] sm:mt-8 md:grid md:grid-cols-3 md:items-stretch md:gap-4 md:overflow-visible">
           {pricing.plans.map((plan) => (
             <PlanCard key={plan.id} plan={plan} period={period} suffix={current.suffix} planHref={planHref} />
           ))}
         </div>
+        <div className="mt-2.5 flex items-center justify-center gap-2 md:hidden" role="tablist" aria-label="Тарифы">
+          {pricing.plans.map((plan, i) => (
+            <button
+              key={plan.id}
+              type="button"
+              role="tab"
+              aria-selected={i === activeCard}
+              aria-label={plan.name}
+              onClick={() => scrollToCard(i)}
+              className={cx(
+                'h-2 transition-all',
+                i === activeCard ? cx('w-6', TONE[plan.tone].solid) : 'w-2 bg-white/25',
+              )}
+            />
+          ))}
+        </div>
 
-        <div className="mt-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-          <p className="flex items-center gap-2 font-mono text-xs text-smoke">
+        <div className="mt-2.5 flex flex-col gap-4 sm:mt-6 lg:flex-row lg:items-center lg:justify-between">
+          <p className="flex items-center gap-2 font-mono text-xs text-smoke max-sm:hidden">
             <span className="size-1.5 shrink-0 bg-iris" aria-hidden />
             {pricing.dialogNote}
           </p>
@@ -121,8 +157,9 @@ function PlanCard({
 
   return (
     <article
+      data-featured={light || undefined}
       className={cx(
-        'notch relative flex flex-col overflow-hidden p-6 [--notch:28px] lg:p-7',
+        'notch relative flex w-full shrink-0 snap-center snap-always flex-col overflow-hidden p-5 [--notch:28px] sm:p-6 md:w-auto lg:p-7',
         light ? 'bg-paper text-ink shadow-[0_40px_90px_-40px_rgba(168,85,247,.8)] md:-my-3 md:py-9' : 'bg-ink-2 ring-1 ring-inset ring-white/10',
       )}
     >
@@ -136,10 +173,10 @@ function PlanCard({
           </span>
         )}
       </div>
-      <h3 className="mt-4 font-display text-xl leading-tight font-semibold tracking-tight">{plan.name}</h3>
-      <p className={cx('mt-1.5 text-sm', light ? 'text-ink/60' : 'text-smoke')}>{plan.description}</p>
+      <h3 className="mt-3 font-display text-xl leading-tight font-semibold tracking-tight sm:mt-4">{plan.name}</h3>
+      <p className={cx('mt-1.5 text-sm max-sm:hidden', light ? 'text-ink/60' : 'text-smoke')}>{plan.description}</p>
 
-      <div className={cx('mt-5 border-t pt-4', light ? 'border-ink/10' : 'border-white/10')}>
+      <div className={cx('mt-4 border-t pt-3 sm:mt-5 sm:pt-4', light ? 'border-ink/10' : 'border-white/10')}>
         <p className="flex flex-wrap items-baseline gap-x-2">
           <span className="font-display text-[2.6rem] leading-none font-bold tracking-[-0.055em] tabular-nums">${price}</span>
           <span className={cx('text-sm', light ? 'text-ink/55' : 'text-bone')}>{suffix}</span>
@@ -155,7 +192,7 @@ function PlanCard({
         </p>
       </div>
 
-      <ul className="mt-5 grid gap-2.5">
+      <ul className="mt-3 grid gap-2 sm:mt-5 sm:gap-2.5">
         {plan.features.map((f) => (
           <li key={f} className="flex gap-2.5 text-sm leading-snug">
             <Check className={cx('size-4', light ? 'text-iris-deep' : tone.text)} />
@@ -164,7 +201,7 @@ function PlanCard({
         ))}
       </ul>
 
-      <ul className={cx('mt-5 grid gap-2 border-t border-dashed pt-4', light ? 'border-ink/20' : 'border-white/15')}>
+      <ul className={cx('mt-4 grid gap-2 border-t border-dashed pt-3 sm:mt-5 sm:pt-4', light ? 'border-ink/20' : 'border-white/15')}>
         {plan.limits.map((l) => (
           <li key={l.label} className={cx('flex items-baseline justify-between gap-3 text-[13px]', light ? 'text-ink/60' : 'text-bone')}>
             <span>{l.label}</span>
@@ -173,7 +210,7 @@ function PlanCard({
         ))}
       </ul>
 
-      <div className="mt-auto pt-6">
+      <div className="mt-auto pt-5 sm:pt-6">
         <Button
           href={planHref(plan.name, suffix)}
           target="_blank"

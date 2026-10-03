@@ -51,7 +51,18 @@ export function VideoModal({ product, onClose }: { product: ProductId | null; on
 }
 
 // Кнопка «Как это выглядит» — открывает ролик нужного модуля, не уводя со страницы.
-export function WatchButton({ product, label, className }: { product: ProductId; label?: string; className?: string }) {
+export function WatchButton({
+  product,
+  label,
+  compact,
+  className,
+}: {
+  product: ProductId
+  label?: string
+  // compact: на мобильном — только кнопка Play и длительность
+  compact?: boolean
+  className?: string
+}) {
   const [open, setOpen] = useState(false)
   const p = products[product]
   const tone = TONE[product]
@@ -62,6 +73,7 @@ export function WatchButton({ product, label, className }: { product: ProductId;
         onClick={() => setOpen(true)}
         className={cx(
           'group inline-flex items-center gap-3 py-1.5 pr-4 pl-1.5 text-left ring-1 ring-inset ring-white/15 transition-colors hover:bg-white/5',
+          compact && 'max-sm:shrink-0 max-sm:gap-2 max-sm:pr-3',
           className,
         )}
       >
@@ -71,8 +83,8 @@ export function WatchButton({ product, label, className }: { product: ProductId;
           </svg>
         </span>
         <span className="font-display text-sm font-semibold tracking-tight">
-          {label ?? p.demoLabel}
-          <span className="ml-2 font-mono text-xs font-normal text-smoke">{p.video.duration}</span>
+          <span className={compact ? 'max-sm:sr-only' : undefined}>{label ?? p.demoLabel}</span>
+          <span className={cx('font-mono text-xs font-normal text-smoke', compact ? 'sm:ml-2' : 'ml-2')}>{p.video.duration}</span>
         </span>
       </button>
       <VideoModal product={open ? product : null} onClose={() => setOpen(false)} />

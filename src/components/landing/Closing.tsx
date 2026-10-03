@@ -36,10 +36,10 @@ export function Closing({ contactUrl }: { contactUrl: string }) {
 export function Footer({ contact, nav = ru.nav }: { contact: string; nav?: { href: string; label: string }[] }) {
   const f = ru.footer
   return (
-    <footer className="border-t border-white/10 pt-16 pb-28 sm:pb-16">
+    <footer className="border-t border-white/10 pt-10 pb-24 sm:pt-16 sm:pb-16">
       <Container>
-        <div className="grid gap-12 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
-          <div>
+        <div className="grid grid-cols-2 gap-x-6 gap-y-8 sm:gap-12 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
+          <div className="col-span-2 md:col-span-1">
             <Logo className="text-2xl" />
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-smoke">{f.tagline}</p>
           </div>
@@ -65,13 +65,13 @@ export function Footer({ contact, nav = ru.nav }: { contact: string; nav?: { hre
           </FooterCol>
         </div>
 
-        <div className="mt-16 flex flex-col justify-between gap-4 border-t border-white/10 pt-6 font-mono text-xs text-smoke sm:flex-row">
+        <div className="mt-10 flex flex-col justify-between gap-2 border-t border-white/10 pt-5 font-mono text-xs text-smoke sm:mt-16 sm:flex-row sm:gap-4 sm:pt-6">
           <span>© {year} OSTRO AI</span>
           <span>{f.bottom}</span>
         </div>
       </Container>
 
-      <svg viewBox="0 0 1000 190" className="pointer-events-none mt-10 w-full select-none" aria-hidden>
+      <svg viewBox="0 0 1000 190" className="pointer-events-none mt-4 w-full select-none sm:mt-10" aria-hidden>
         <text x="500" y="170" textAnchor="middle" className="fill-white/[0.04] font-display text-[240px] font-bold tracking-[-0.07em]">
           OSTRO
         </text>
@@ -84,16 +84,25 @@ function FooterCol({ title, children }: { title: string; children: React.ReactNo
   return (
     <div>
       <p className="label text-smoke">{title}</p>
-      <div className="mt-5 flex flex-col gap-3 text-sm text-bone">{children}</div>
+      <div className="mt-4 flex flex-col gap-2.5 text-sm text-bone sm:mt-5 sm:gap-3">{children}</div>
     </div>
   )
 }
 
-// Липкая кнопка на мобильных: появляется после первого экрана и прячется у финального CTA.
-export function MobileCta({ contactUrl, label = ru.mobileCta }: { contactUrl: string; label?: string }) {
+// Липкая кнопка на мобильных. По умолчанию — после первого экрана и до финального CTA.
+// showIn: показывать только пока на экране эта секция (на лендинге — FAQ, где нет своей кнопки).
+export function MobileCta({ contactUrl, label = ru.mobileCta, showIn }: { contactUrl: string; label?: string; showIn?: string }) {
   const [visible, setVisible] = useState(false)
 
   useEffect(() => {
+    if (showIn) {
+      const target = document.getElementById(showIn)
+      if (!target) return
+      const io = new IntersectionObserver(([entry]) => setVisible(entry.isIntersecting), { threshold: 0.4 })
+      io.observe(target)
+      return () => io.disconnect()
+    }
+
     const lead = document.getElementById('lead')
     let pastHero = false
     let atLead = false
@@ -112,7 +121,7 @@ export function MobileCta({ contactUrl, label = ru.mobileCta }: { contactUrl: st
       io.disconnect()
       window.removeEventListener('scroll', onScroll)
     }
-  }, [])
+  }, [showIn])
 
   return (
     <div
