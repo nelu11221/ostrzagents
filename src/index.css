@@ -227,6 +227,17 @@
     85% { opacity: 1; }
     to { left: 100%; opacity: 0; }
   }
+  /* Тарифы на мобильном: карточки один раз «дёргаются», показывая, что их можно листать */
+  @media (width < 48rem) {
+    [data-nudge] > * {
+      animation: nudge 1.4s cubic-bezier(0.45, 0, 0.2, 1) 0.2s 2;
+    }
+  }
+  @keyframes nudge {
+    0%, 100% { translate: 0; }
+    35% { translate: -44px; }
+    65% { translate: 6px; }
+  }
   .typing-dot {
     animation: typing 1s infinite;
   }

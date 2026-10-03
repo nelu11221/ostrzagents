@@ -47,7 +47,24 @@ export function Pricing({ planHref, setupHref, title, id = 'pricing' }: Props) {
     scrollToCard(featuredIndex, false)
     const onScroll = () => setActiveCard(Math.round(row.scrollLeft / row.clientWidth))
     row.addEventListener('scroll', onScroll, { passive: true })
-    return () => row.removeEventListener('scroll', onScroll)
+
+    // Подсказка, что можно листать: при первом показе карточки один раз «дёргаются» влево-вправо
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return
+        row.dataset.nudge = ''
+        io.disconnect()
+      },
+      { threshold: 0.6 },
+    )
+    io.observe(row)
+    const stopNudge = () => delete row.dataset.nudge
+    row.addEventListener('touchstart', stopNudge, { passive: true })
+    return () => {
+      row.removeEventListener('scroll', onScroll)
+      row.removeEventListener('touchstart', stopNudge)
+      io.disconnect()
+    }
   }, [featuredIndex])
 
   return (
@@ -94,24 +111,31 @@ export function Pricing({ planHref, setupHref, title, id = 'pricing' }: Props) {
             <PlanCard key={plan.id} plan={plan} period={period} suffix={current.suffix} planHref={planHref} />
           ))}
         </div>
-        <div className="mt-2.5 flex items-center justify-center gap-2 md:hidden" role="tablist" aria-label="Тарифы">
-          {pricing.plans.map((plan, i) => (
-            <button
-              key={plan.id}
-              type="button"
-              role="tab"
-              aria-selected={i === activeCard}
-              aria-label={plan.name}
-              onClick={() => scrollToCard(i)}
-              className={cx(
-                'h-2 transition-all',
-                i === activeCard ? cx('w-6', TONE[plan.tone].solid) : 'w-2 bg-white/25',
-              )}
-            />
-          ))}
+        {/* Мобильный переключатель: видно, что тарифов три и их можно листать */}
+        <div className="mt-2 grid grid-cols-3 gap-1 bg-white/5 p-1 ring-1 ring-inset ring-white/10 md:hidden" role="tablist" aria-label="Тарифы">
+          {pricing.plans.map((plan, i) => {
+            const selected = i === activeCard
+            return (
+              <button
+                key={plan.id}
+                type="button"
+                role="tab"
+                aria-selected={selected}
+                onClick={() => scrollToCard(i)}
+                className={cx(
+                  'flex h-8 items-center justify-center gap-1.5 px-1 text-xs font-medium whitespace-nowrap transition-colors',
+                  selected ? cx(TONE[plan.tone].solid, 'text-white') : 'text-bone',
+                )}
+              >
+                {i < activeCard && <span aria-hidden>‹</span>}
+                {plan.id === 'bundle' ? 'Связка' : plan.name}
+                {i > activeCard && <span aria-hidden>›</span>}
+              </button>
+            )
+          })}
         </div>
 
-        <div className="mt-2.5 flex flex-col gap-4 sm:mt-6 lg:flex-row lg:items-center lg:justify-between">
+        <div className="mt-2 flex flex-col gap-4 sm:mt-6 lg:flex-row lg:items-center lg:justify-between">
           <p className="flex items-center gap-2 font-mono text-xs text-smoke max-sm:hidden">
             <span className="size-1.5 shrink-0 bg-iris" aria-hidden />
             {pricing.dialogNote}
@@ -121,7 +145,7 @@ export function Pricing({ planHref, setupHref, title, id = 'pricing' }: Props) {
             href={setupHref}
             target="_blank"
             rel="noreferrer"
-            className="group notch inline-flex shrink-0 items-center gap-3 self-start bg-white/5 py-2 pr-2 pl-4 text-sm ring-1 ring-inset ring-white/15 transition-colors [--notch:10px] hover:bg-white/10 lg:self-auto"
+            className="group notch inline-flex shrink-0 items-center gap-3 self-stretch bg-white/5 py-1.5 pr-1.5 pl-3 text-[13px] leading-snug ring-1 sm:self-start sm:py-2 sm:pr-2 sm:pl-4 sm:text-sm ring-inset ring-white/15 transition-colors [--notch:10px] hover:bg-white/10 lg:self-auto"
           >
             <span className="text-bone">
               {pricing.setup.text} <b className="font-semibold whitespace-nowrap text-paper">{pricing.setup.price}</b>
@@ -159,7 +183,7 @@ function PlanCard({
     <article
       data-featured={light || undefined}
       className={cx(
-        'notch relative flex w-full shrink-0 snap-center snap-always flex-col overflow-hidden p-5 [--notch:28px] sm:p-6 md:w-auto lg:p-7',
+        'notch relative flex w-full shrink-0 snap-center snap-always flex-col overflow-hidden p-4 [--notch:28px] sm:p-6 md:w-auto lg:p-7',
         light ? 'bg-paper text-ink shadow-[0_40px_90px_-40px_rgba(168,85,247,.8)] md:-my-3 md:py-9' : 'bg-ink-2 ring-1 ring-inset ring-white/10',
       )}
     >
@@ -181,7 +205,7 @@ function PlanCard({
           <span className="font-display text-[2.6rem] leading-none font-bold tracking-[-0.055em] tabular-nums">${price}</span>
           <span className={cx('text-sm', light ? 'text-ink/55' : 'text-bone')}>{suffix}</span>
         </p>
-        <p className={cx('mt-2 min-h-5 font-mono text-xs', light ? 'text-ink/50' : 'text-smoke')}>
+        <p className={cx('mt-1 min-h-5 font-mono text-xs sm:mt-2', light ? 'text-ink/50' : 'text-smoke')}>
           {separate !== null && <span className="mr-2 line-through">{pricing.separately(separate)}</span>}
           {period === 'quarter' && (
             <>
@@ -201,7 +225,7 @@ function PlanCard({
         ))}
       </ul>
 
-      <ul className={cx('mt-4 grid gap-2 border-t border-dashed pt-3 sm:mt-5 sm:pt-4', light ? 'border-ink/20' : 'border-white/15')}>
+      <ul className={cx('mt-3 grid gap-1.5 border-t border-dashed pt-2.5 sm:mt-5 sm:gap-2 sm:pt-4', light ? 'border-ink/20' : 'border-white/15')}>
         {plan.limits.map((l) => (
           <li key={l.label} className={cx('flex items-baseline justify-between gap-3 text-[13px]', light ? 'text-ink/60' : 'text-bone')}>
             <span>{l.label}</span>
@@ -210,7 +234,7 @@ function PlanCard({
         ))}
       </ul>
 
-      <div className="mt-auto pt-5 sm:pt-6">
+      <div className="mt-auto pt-4 sm:pt-6">
         <Button
           href={planHref(plan.name, suffix)}
           target="_blank"

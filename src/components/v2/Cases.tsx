@@ -25,7 +25,7 @@ export function Cases({ ctaHref, trialHref }: Props) {
   const active = list[activeByProduct[product]] ?? list[0]
 
   return (
-    <section id="cases" className="relative overflow-hidden border-t border-white/10 bg-ink-2 py-6 sm:py-24 lg:py-28">
+    <section id="cases" className="relative overflow-hidden border-t border-white/10 bg-ink-2 py-8 sm:py-24 lg:py-28">
       <Container>
         <div className="flex flex-col justify-between gap-3 sm:gap-8 lg:flex-row lg:items-end">
           <SectionHead label={c.label} title={c.title} sub={c.sub} dot="bg-linear-to-br from-signal to-iris" className="max-sm:[&_h2]:hidden max-sm:[&_h2+p]:hidden" />
@@ -192,7 +192,7 @@ function CaseCard({ item, ctaHref }: { item: CaseStudy; ctaHref: string }) {
                 onClick={() => setOpenShot(i)}
                 aria-label={`${c.shotLabel}: ${shot.alt}`}
                 style={{ transform: `rotate(${offset * 6}deg) translateY(${Math.abs(offset) * 18}px)`, zIndex: offset === 0 ? 2 : 1 }}
-                className="relative -mx-3 w-[21vw] max-w-[190px] shrink-0 cursor-zoom-in overflow-hidden shadow-[0_30px_60px_-20px_rgba(0,0,0,.8)] ring-1 ring-white/15 transition-[translate] duration-300 hover:z-10 hover:-translate-y-3 sm:-mx-8 sm:w-[190px]"
+                className="relative -mx-3 w-[19vw] max-w-[190px] shrink-0 cursor-zoom-in overflow-hidden shadow-[0_30px_60px_-20px_rgba(0,0,0,.8)] ring-1 ring-white/15 transition-[translate] duration-300 hover:z-10 hover:-translate-y-3 sm:-mx-8 sm:w-[190px]"
               >
                 <img src={shot.src} alt={shot.alt} loading="lazy" className="aspect-[9/15] w-full object-cover object-top" />
               </button>

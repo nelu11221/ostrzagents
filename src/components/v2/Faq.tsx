@@ -8,7 +8,7 @@ export function Faq({ items, title, id = 'faq' }: { items?: Item[]; title?: stri
   const f = v2.faq
   const list = items ?? f.items
   return (
-    <section id={id} className="border-t border-white/10 py-12 sm:py-24 lg:py-32">
+    <section id={id} className="border-t border-white/10 py-14 sm:py-24 lg:py-32">
       <Container className="grid gap-6 sm:gap-12 lg:grid-cols-[1fr_1.6fr]">
         <SectionHead label={f.label} title={title ?? f.title} dot="bg-linear-to-br from-signal to-iris" className="lg:sticky lg:top-28 lg:self-start" />
         <div className="border-t border-white/10">

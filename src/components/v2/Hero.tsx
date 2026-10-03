@@ -8,7 +8,7 @@ import { Button, Container, cx } from '../ui/primitives'
 export function Hero({ trialHref }: { trialHref: string }) {
   const h = v2.hero
   return (
-    <section id="top" className="grain relative overflow-hidden pt-24 pb-10 sm:pt-36 sm:pb-20 lg:pb-28">
+    <section id="top" className="grain relative overflow-hidden pt-24 pb-14 sm:pt-36 sm:pb-20 lg:pb-28">
       <div className="absolute -top-72 left-1/2 h-[680px] w-[1200px] -translate-x-1/2 rounded-full bg-linear-to-r from-signal/35 to-iris/30 blur-[160px]" aria-hidden />
       <PixelBg className="[mask-image:radial-gradient(ellipse_48%_36%_at_50%_30%,transparent_40%,black_100%)]" opacity={0.75} />
 

@@ -27,7 +27,7 @@ export function Modules({ tab, onTab, trialHref }: Props) {
   const price = pricing.plans.find((p) => p.id === tab)?.month
 
   return (
-    <section id="modules" className="relative flex scroll-mt-16 flex-col justify-center overflow-hidden border-t border-white/10 py-6 sm:py-16 lg:min-h-[calc(100svh-72px)] lg:py-14">
+    <section id="modules" className="relative flex scroll-mt-16 flex-col justify-center overflow-hidden border-t border-white/10 py-9 sm:py-16 lg:min-h-[calc(100svh-72px)] lg:py-14">
       <div className="grid-lines absolute inset-0 [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,black,transparent)]" aria-hidden />
       <div className={cx('absolute -top-40 -right-40 size-[600px] rounded-full blur-[150px] transition-colors duration-700', t.glow)} aria-hidden />
 

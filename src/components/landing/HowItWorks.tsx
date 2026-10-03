@@ -1,11 +1,18 @@
 import { ru } from '../../content/ru'
-import { Container, LogoMark, Reveal, SectionHead } from '../ui/primitives'
+import { Container, LogoMark, Reveal, SectionHead, cx } from '../ui/primitives'
 
-export function Ticker() {
-  const items = [...ru.ticker, ...ru.ticker]
+// Косая бегущая строка-разделитель. reverse — наклон и движение в обратную сторону (для второй ленты на странице).
+export function Ticker({ items: source = ru.ticker, reverse = false }: { items?: string[]; reverse?: boolean }) {
+  const items = [...source, ...source]
   return (
-    <div className="-rotate-1 overflow-hidden border-y border-ink bg-linear-to-r from-signal-btn to-iris-btn py-3 text-white" aria-hidden>
-      <div className="flex w-max animate-marquee gap-8 whitespace-nowrap">
+    <div
+      className={cx(
+        'my-4 overflow-hidden border-y border-ink py-3 text-white sm:my-0',
+        reverse ? 'rotate-1 bg-linear-to-r from-iris-btn to-signal-btn' : '-rotate-1 bg-linear-to-r from-signal-btn to-iris-btn',
+      )}
+      aria-hidden
+    >
+      <div className={cx('flex w-max animate-marquee gap-8 whitespace-nowrap', reverse && '[animation-direction:reverse]')}>
         {items.map((t, i) => (
           <span key={i} className="flex items-center gap-8 font-display text-sm font-semibold tracking-tight uppercase sm:text-base">
             {t}
