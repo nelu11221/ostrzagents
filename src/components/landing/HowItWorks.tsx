@@ -7,7 +7,8 @@ export function Ticker({ items: source = ru.ticker, reverse = false }: { items?:
   return (
     <div
       className={cx(
-        'my-4 overflow-hidden border-y border-ink py-3 text-white sm:my-0',
+        // без внешних отступов на мобильном — иначе под наклонной лентой видна тёмная полоса фона
+        'relative z-10 overflow-hidden border-y border-ink py-3 text-white max-sm:border-y-0',
         reverse ? 'rotate-1 bg-linear-to-r from-iris-btn to-signal-btn' : '-rotate-1 bg-linear-to-r from-signal-btn to-iris-btn',
       )}
       aria-hidden
