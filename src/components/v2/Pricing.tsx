@@ -177,7 +177,6 @@ function PlanCard({
   const price = priceOf(plan, period)
   const separate = plan.id === 'bundle' ? separateOf(period) : null
   const saving = separate ? Math.round((1 - price / separate) * 100) : null
-  const isTest = period === 'test'
 
   return (
     <article
@@ -216,9 +215,9 @@ function PlanCard({
         </p>
       </div>
 
-      <ul className="mt-3 grid gap-2 sm:mt-5 sm:gap-2.5">
+      <ul className="mt-3 grid gap-1.5 sm:mt-5 sm:gap-2.5">
         {plan.features.map((f) => (
-          <li key={f} className="flex gap-2.5 text-sm leading-snug">
+          <li key={f} className="flex gap-2.5 text-[13px] leading-snug sm:text-sm">
             <Check className={cx('size-4', light ? 'text-iris-deep' : tone.text)} />
             {f}
           </li>
@@ -241,9 +240,9 @@ function PlanCard({
           rel="noreferrer"
           variant={light ? 'duo' : plan.tone === 'sales' ? 'iris' : 'signal'}
           className="w-full"
-          aria-label={`${isTest ? pricing.trialCta : pricing.cta}: ${plan.name}`}
+          aria-label={`${plan.cta}: ${plan.name}`}
         >
-          {isTest ? pricing.trialCta : pricing.cta}
+          {plan.cta}
         </Button>
       </div>
     </article>

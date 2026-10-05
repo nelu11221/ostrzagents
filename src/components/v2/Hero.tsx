@@ -26,7 +26,7 @@ export function Hero({ trialHref }: { trialHref: string }) {
             {h.eyebrow}
           </p>
 
-          <h1 className="mt-6 font-display text-[1.8rem] sm:mt-8 sm:text-[clamp(2rem,5.6vw,5rem)] leading-[1.02] font-bold tracking-[-0.045em] text-balance">
+          <h1 className="mt-6 font-display text-[1.7rem] sm:mt-8 sm:text-[clamp(2rem,4.4vw,3.9rem)] leading-[1.02] font-bold tracking-[-0.045em] text-balance">
             <span style={{ animationDelay: '0.08s' }} className="animate-rise block">{h.titleA}</span>
             <span style={{ animationDelay: '0.16s' }} className="animate-rise block">
               {h.titleB}{' '}
@@ -36,7 +36,7 @@ export function Hero({ trialHref }: { trialHref: string }) {
             </span>
           </h1>
 
-          <p style={{ animationDelay: '0.26s' }} className="animate-rise mx-auto mt-4 max-w-2xl text-[15px] leading-relaxed text-bone sm:mt-7 sm:text-lg">
+          <p style={{ animationDelay: '0.26s' }} className="animate-rise mx-auto mt-4 max-w-2xl text-[15px] leading-relaxed text-balance text-bone sm:mt-7 sm:text-lg">
             {h.sub}
           </p>
 
