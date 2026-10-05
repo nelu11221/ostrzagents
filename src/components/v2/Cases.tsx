@@ -143,7 +143,16 @@ function CaseCard({ item, ctaHref }: { item: CaseStudy; ctaHref: string }) {
             {metrics.map((m) => (
               <div key={m.label} className="bg-ink px-1.5 py-2.5 sm:p-4">
                 <dd className="font-display text-[13px] font-bold whitespace-nowrap tracking-tight sm:text-xl">{m.value}</dd>
-                <dt className="mt-1 text-[10px] leading-tight text-smoke sm:text-xs sm:leading-snug">{m.label}</dt>
+                <dt className="mt-1 text-[10px] leading-tight text-smoke sm:text-xs sm:leading-snug">
+                  {m.short ? (
+                    <>
+                      <span className="sm:hidden">{m.short}</span>
+                      <span className="max-sm:hidden">{m.label}</span>
+                    </>
+                  ) : (
+                    m.label
+                  )}
+                </dt>
               </div>
             ))}
           </dl>
@@ -167,11 +176,11 @@ function CaseCard({ item, ctaHref }: { item: CaseStudy; ctaHref: string }) {
           </div>
         </div>
 
-        <div className="mt-auto flex items-stretch gap-2 pt-3 sm:items-center sm:gap-3 sm:pt-10">
-          <Button href={ctaHref} target="_blank" rel="noreferrer" variant={tone.button} className="max-sm:flex-1 max-sm:px-3">
+        <div className="mt-auto flex items-stretch gap-2 pt-3 sm:flex-wrap sm:items-center sm:gap-3 sm:pt-10">
+          <Button href={ctaHref} target="_blank" rel="noreferrer" variant={tone.button} className="whitespace-nowrap max-sm:flex-1 max-sm:px-3">
             {c.cta}
           </Button>
-          <WatchButton product={item.product} compact />
+          <WatchButton product={item.product} label={c.watchLabel} compact className="whitespace-nowrap" />
         </div>
       </div>
 
@@ -188,7 +197,7 @@ function CaseCard({ item, ctaHref }: { item: CaseStudy; ctaHref: string }) {
             aria-hidden
           />
           <div className="grid-lines absolute inset-0 [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_75%)]" aria-hidden />
-          <p className="label relative mb-6 text-smoke max-sm:hidden">{hasVideos ? c.videosLabel : c.shotsLabel}</p>
+          <p className="label relative mb-6 text-smoke max-sm:hidden">{hasVideos ? c.videosLabel : item.product === 'sales' ? c.salesShotsLabel : c.shotsLabel}</p>
           <div className="relative flex items-center justify-center">
             {shots.map((shot, i) => {
               const offset = i - (shots.length - 1) / 2
