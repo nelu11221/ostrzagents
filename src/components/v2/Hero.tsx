@@ -8,7 +8,7 @@ import { Button, Container, cx } from '../ui/primitives'
 export function Hero() {
   const h = v2.hero
   return (
-    <section id="top" className="grain relative overflow-hidden pt-38 pb-16 sm:pt-36 sm:pb-20 lg:pb-28">
+    <section id="top" className="grain relative overflow-hidden pt-32 pb-16 sm:pt-36 sm:pb-20 lg:pb-28">
       <div className="absolute -top-72 left-1/2 h-[680px] w-[1200px] -translate-x-1/2 rounded-full bg-linear-to-r from-signal/35 to-iris/30 blur-[160px]" aria-hidden />
       <PixelBg className="[mask-image:radial-gradient(ellipse_48%_36%_at_50%_30%,transparent_40%,black_100%)]" opacity={0.75} />
 
@@ -33,7 +33,7 @@ export function Hero() {
             ))}
           </dl>
 
-          <h1 className="mt-11 font-display text-[1.7rem] sm:mt-12 sm:text-[clamp(2rem,4.4vw,3.9rem)] leading-[1.02] font-bold tracking-[-0.045em] text-balance">
+          <h1 className="mt-17 font-display text-[1.7rem] sm:mt-12 sm:text-[clamp(2rem,4.4vw,3.9rem)] leading-[1.02] font-bold tracking-[-0.045em] text-balance">
             <span style={{ animationDelay: '0.08s' }} className="animate-rise block">{h.titleA}</span>
             <span style={{ animationDelay: '0.16s' }} className="animate-rise block">
               {h.titleB}{' '}
