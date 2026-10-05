@@ -4,6 +4,8 @@
 export const DEFAULT_CONTACT = 'tony_ostro'
 
 export const ru = {
+  // Ссылка на сайт агентства в шапке (просьба Антона)
+  agencyLink: { href: 'https://ostroai.com', label: 'OSTRO SMM' },
   nav: [
     { href: '#leadgen', label: 'Лидоген' },
     { href: '#sales', label: 'AI-сейлз' },
@@ -178,7 +180,7 @@ export const v2 = {
 
   modules: {
     label: 'Модули',
-    title: 'Нашли клиента и довели до сделки. В одном кабинете.',
+    title: 'Найдём клиентов и доведём до сделки.',
     tabs: { leadgen: 'Лидоген', sales: 'AI-сейлз' },
     trialCta: 'Тест на 3 дня — $19',
     priceFrom: (price: number) => `Тариф от $${price} в месяц`,

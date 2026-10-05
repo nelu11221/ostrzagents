@@ -54,7 +54,7 @@ export function Header({
         </SmartLink>
 
         <nav aria-label="Основная навигация" className="hidden lg:block">
-          <ul className="flex items-center gap-8">
+          <ul className="flex items-center gap-5 whitespace-nowrap xl:gap-8">
             {nav.map((item) => (
               <li key={item.href}>
                 <SmartLink href={item.href} className="text-sm text-bone transition-colors hover:text-paper">
@@ -62,6 +62,17 @@ export function Header({
                 </SmartLink>
               </li>
             ))}
+            <li className="border-l border-white/15 pl-5 xl:pl-8">
+              <a
+                href={ru.agencyLink.href}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-1 text-sm text-bone transition-colors hover:text-paper"
+              >
+                {ru.agencyLink.label}
+                <span aria-hidden className="text-xs">↗</span>
+              </a>
+            </li>
           </ul>
         </nav>
 
@@ -71,12 +82,12 @@ export function Header({
             target="_blank"
             rel="noreferrer"
             aria-label="Написать в Telegram"
-            className="hidden size-10 place-items-center text-bone transition-colors hover:text-paper sm:grid"
+            className="hidden size-10 place-items-center text-bone transition-colors hover:text-paper sm:grid lg:max-xl:hidden"
           >
             <TelegramIcon />
           </a>
           <div className="hidden sm:block">
-            <Button href={ctaHref} target="_blank" rel="noreferrer">
+            <Button href={ctaHref} target="_blank" rel="noreferrer" className="whitespace-nowrap">
               {ctaLabel}
             </Button>
           </div>
@@ -111,6 +122,18 @@ export function Header({
                 </SmartLink>
               </li>
             ))}
+            <li>
+              <a
+                href={ru.agencyLink.href}
+                target="_blank"
+                rel="noreferrer"
+                onClick={() => setOpen(false)}
+                className="flex items-center justify-between border-b border-white/10 py-4 font-display text-2xl font-semibold"
+              >
+                {ru.agencyLink.label}
+                <span className="font-mono text-xs text-smoke">↗</span>
+              </a>
+            </li>
           </ul>
           <div className="mt-auto pt-8">
             <Button href={ctaHref} target="_blank" rel="noreferrer" size="lg" className="w-full" onClick={() => setOpen(false)}>
