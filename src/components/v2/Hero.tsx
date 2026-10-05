@@ -21,12 +21,12 @@ export function Hero() {
             className="animate-rise mx-auto grid max-w-2xl grid-cols-3 divide-x divide-white/10 border border-white/15 bg-ink/85 backdrop-blur-sm"
           >
             {h.stats.map((s) => (
-              <div key={s.label} className="flex flex-col items-center justify-center gap-0.5 px-2 py-2 sm:flex-row sm:gap-3 sm:px-4 sm:py-3">
+              <div key={s.label} className="flex flex-col items-center justify-center gap-0.5 px-2 py-2 sm:gap-1.5 sm:px-4 sm:py-3">
                 <dt className="sr-only">{s.label}</dt>
                 <dd className="bg-linear-to-r from-signal-hot to-iris-hot bg-clip-text font-display text-lg leading-none font-bold tracking-tight whitespace-nowrap text-transparent sm:text-2xl">
                   {s.value}
                 </dd>
-                <dd className="text-[10px] leading-tight text-bone sm:text-left sm:text-xs" aria-hidden>
+                <dd className="text-[10px] leading-tight text-bone sm:text-xs sm:whitespace-nowrap" aria-hidden>
                   {s.label}
                 </dd>
               </div>

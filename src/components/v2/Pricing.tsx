@@ -153,7 +153,7 @@ export function Pricing({ planHref, setupHref, title, id = 'pricing' }: Props) {
                 {pricing.setup.short} <b className="font-semibold whitespace-nowrap">{pricing.setup.price}</b>
               </span>
               <span className="block font-display text-xl font-semibold tracking-tight max-sm:hidden">{pricing.setup.title}</span>
-              <span className="mt-1 block text-sm leading-snug text-bone max-sm:hidden lg:text-[15px]">{pricing.setup.text}</span>
+              <span className="mt-1 block text-sm leading-snug text-bone max-sm:hidden lg:text-[15px] text-balance">{pricing.setup.text}</span>
             </span>
             <span className="font-display text-2xl font-bold tracking-tight whitespace-nowrap max-sm:hidden lg:text-3xl">{pricing.setup.price}</span>
             <span className="inline-flex h-8 shrink-0 items-center gap-1.5 bg-paper px-3 font-display text-xs font-semibold text-ink transition-colors group-hover:bg-white sm:h-12 sm:gap-2 sm:px-6 sm:text-base">
