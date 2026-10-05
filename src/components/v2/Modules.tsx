@@ -27,7 +27,7 @@ export function Modules({ tab, onTab, trialHref }: Props) {
   const price = pricing.plans.find((p) => p.id === tab)?.month
 
   return (
-    <section id="modules" className="relative flex scroll-mt-16 flex-col justify-center overflow-hidden border-t border-white/10 py-9 sm:py-16 lg:min-h-[calc(100svh-72px)] lg:py-14">
+    <section id="modules" className="relative flex scroll-mt-16 flex-col justify-center overflow-hidden border-t border-white/10 py-8 sm:py-16 lg:min-h-[calc(100svh-72px)] lg:py-14">
       <div className="grid-lines absolute inset-0 [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,black,transparent)]" aria-hidden />
       <div className={cx('absolute -top-40 -right-40 size-[600px] rounded-full blur-[150px] transition-colors duration-700', t.glow)} aria-hidden />
 
@@ -76,10 +76,10 @@ export function Modules({ tab, onTab, trialHref }: Props) {
           >
             <div className="order-2 min-w-0 lg:order-none">
               <p className={cx('label max-sm:hidden', t.hot)}>{content.label}</p>
-              <h3 className="font-display text-[clamp(1.25rem,2.2vw,1.9rem)] sm:mt-3 leading-tight font-semibold tracking-[-0.03em] text-balance">
+              <h3 className="font-display text-[1.15rem] sm:mt-3 sm:text-[clamp(1.25rem,2.2vw,1.9rem)] leading-tight font-semibold tracking-[-0.03em] text-balance">
                 {content.title}
               </h3>
-              <p className="mt-2 max-w-xl text-[15px] leading-relaxed text-bone sm:mt-3 sm:text-base">{product.short}</p>
+              <p className="mt-1.5 max-w-xl text-sm leading-relaxed text-bone sm:mt-3 sm:text-base">{product.short}</p>
 
               <ul className="mt-6 grid gap-3 border-t border-white/10 pt-6 max-sm:hidden">
                 {product.shortPoints.map((point) => (

@@ -27,7 +27,7 @@ type Props = {
 // Три тарифа в один ряд и на один экран: Лидоген · Связка (выделена) · AI-сейлз.
 // Срок — тест на 3 дня, месяц или 3 месяца со скидкой 20%.
 export function Pricing({ planHref, setupHref, title, id = 'pricing' }: Props) {
-  const [period, setPeriod] = useState<PeriodId>('month')
+  const [period, setPeriod] = useState<PeriodId>('test')
   const current = pricing.periods.find((p) => p.id === period)!
   const cardsRef = useRef<HTMLDivElement>(null)
   const featuredIndex = pricing.plans.findIndex((p) => 'featured' in p && p.featured)
@@ -136,7 +136,7 @@ export function Pricing({ planHref, setupHref, title, id = 'pricing' }: Props) {
         </div>
 
         <div className="mt-2 flex flex-col gap-4 sm:mt-6 lg:flex-row lg:items-center lg:justify-between">
-          <p className="flex items-center gap-2 font-mono text-xs text-smoke max-sm:hidden">
+          <p className="flex items-center gap-2 font-mono text-xs text-paper max-sm:hidden">
             <span className="size-1.5 shrink-0 bg-iris" aria-hidden />
             {pricing.dialogNote}
           </p>
