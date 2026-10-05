@@ -70,7 +70,7 @@ export function Pricing({ planHref, setupHref, title, id = 'pricing' }: Props) {
   return (
     <section
       id={id}
-      className="grain relative flex scroll-mt-16 flex-col justify-center overflow-hidden border-t border-white/10 py-6 sm:py-16 lg:min-h-[calc(100svh-72px)] lg:py-5"
+      className="grain relative flex scroll-mt-16 flex-col justify-center overflow-hidden border-t border-white/10 py-6 sm:py-16 lg:min-h-[calc(100svh-72px)] lg:py-3"
     >
       <div className="absolute -bottom-40 -left-40 size-[560px] rounded-full bg-signal/20 blur-[140px]" aria-hidden />
       <div className="absolute -right-40 -bottom-40 size-[560px] rounded-full bg-iris/20 blur-[140px]" aria-hidden />
@@ -106,7 +106,7 @@ export function Pricing({ planHref, setupHref, title, id = 'pricing' }: Props) {
           </div>
         </div>
 
-        <div ref={cardsRef} className="pointer-events-auto mt-3 flex snap-x snap-mandatory overflow-x-auto [scrollbar-width:none] sm:mt-8 lg:mt-4 md:grid md:grid-cols-3 md:items-stretch md:gap-4 md:overflow-visible">
+        <div ref={cardsRef} className="pointer-events-auto mt-3 flex snap-x snap-mandatory overflow-x-auto [scrollbar-width:none] sm:mt-8 lg:mt-10 md:grid md:grid-cols-3 md:items-stretch md:gap-4 md:overflow-visible">
           {pricing.plans.map((plan) => (
             <PlanCard key={plan.id} plan={plan} period={period} suffix={current.suffix} planHref={planHref} />
           ))}
@@ -147,7 +147,7 @@ export function Pricing({ planHref, setupHref, title, id = 'pricing' }: Props) {
           rel="noreferrer"
           className="group notch relative mt-2 block bg-linear-to-r from-signal-btn to-iris-btn p-px [--notch:14px] sm:mt-5 sm:[--notch:22px]"
         >
-          <span className="notch flex items-center gap-3 bg-ink-2 py-2 pr-2 pl-3 transition-colors [--notch:13px] group-hover:bg-ink-3 sm:gap-6 sm:p-6 sm:[--notch:21px] lg:px-8 lg:py-4">
+          <span className="notch flex items-center gap-3 bg-ink-2 py-2 pr-2 pl-3 transition-colors [--notch:13px] group-hover:bg-ink-3 sm:gap-6 sm:p-6 sm:[--notch:21px] lg:px-8 lg:py-3">
             <span className="min-w-0 flex-1">
               <span className="block text-[13px] leading-snug text-paper sm:hidden">
                 {pricing.setup.short} <b className="font-semibold whitespace-nowrap">{pricing.setup.price}</b>
