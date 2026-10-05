@@ -123,8 +123,6 @@ export const ru = {
 // ---------- Вариант 2: структура, собранная вокруг конверсии ----------
 // Пункты с пометкой CONFIRM нужно подтвердить у бизнеса перед запуском.
 
-export const BOT_URL = 'https://t.me/leadroom_bot'
-
 export const v2 = {
   nav: [
     { href: '/leadgen', label: 'Лидоген' },
