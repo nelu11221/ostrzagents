@@ -33,7 +33,7 @@ export function Hero() {
             ))}
           </dl>
 
-          <h1 className="mt-6 font-display text-[1.7rem] sm:mt-8 sm:text-[clamp(2rem,4.4vw,3.9rem)] leading-[1.02] font-bold tracking-[-0.045em] text-balance">
+          <h1 className="mt-8 font-display text-[1.7rem] sm:mt-12 sm:text-[clamp(2rem,4.4vw,3.9rem)] leading-[1.02] font-bold tracking-[-0.045em] text-balance">
             <span style={{ animationDelay: '0.08s' }} className="animate-rise block">{h.titleA}</span>
             <span style={{ animationDelay: '0.16s' }} className="animate-rise block">
               {h.titleB}{' '}
@@ -43,11 +43,8 @@ export function Hero() {
             </span>
           </h1>
 
-          <p style={{ animationDelay: '0.26s' }} className="animate-rise mx-auto mt-4 max-w-2xl text-[15px] leading-relaxed whitespace-pre-line text-bone sm:mt-7 sm:text-lg">
-            {h.sub}
-          </p>
 
-          <div style={{ animationDelay: '0.34s' }} className="animate-rise mt-7 flex flex-col justify-center gap-3 sm:mt-9 sm:flex-row">
+          <div style={{ animationDelay: '0.34s' }} className="animate-rise mt-10 flex flex-col justify-center gap-3 sm:mt-14 sm:flex-row">
             {/* Тест на 3 дня — сначала к тарифам, где видно цены теста */}
             <Button href="#pricing" size="lg" variant="duo">
               {h.cta}
@@ -56,9 +53,6 @@ export function Hero() {
               {h.secondary}
             </Button>
           </div>
-          <p style={{ animationDelay: '0.4s' }} className="animate-rise label mt-4 text-smoke sm:mt-5">
-            {h.note}
-          </p>
         </div>
 
         <div style={{ animationDelay: '0.5s' }} className="animate-rise mt-8 max-sm:hidden sm:mt-20">
