@@ -15,18 +15,18 @@ export function Hero() {
       {/* pointer-events пропускаются к пиксельному фону (ripple по клику), кроме кнопок и ссылок */}
       <Container className="pointer-events-none relative z-10 [&_a]:pointer-events-auto [&_button]:pointer-events-auto">
         <div className="mx-auto max-w-6xl text-center">
-          {/* Цифры агентства вместо строки-eyebrow */}
-          <dl
-            style={{ animationDelay: '0s' }}
-            className="animate-rise mx-auto grid max-w-2xl grid-cols-3 divide-x divide-white/10 border border-white/15 bg-ink/85 backdrop-blur-sm"
-          >
-            {h.stats.map((s) => (
-              <div key={s.label} className="flex flex-col items-center justify-center gap-0.5 px-2 py-2 sm:gap-1.5 sm:px-4 sm:py-3">
+          {/* Цифры агентства вместо строки-eyebrow — прямо на фоне, без плашки */}
+          <dl style={{ animationDelay: '0s' }} className="animate-rise mx-auto flex max-w-2xl items-stretch justify-center">
+            {h.stats.map((s, i) => (
+              <div
+                key={s.label}
+                className={cx('flex flex-1 flex-col items-center gap-1 px-2 sm:px-6', i > 0 && 'border-l border-white/15')}
+              >
                 <dt className="sr-only">{s.label}</dt>
-                <dd className="bg-linear-to-r from-signal-hot to-iris-hot bg-clip-text font-display text-lg leading-none font-bold tracking-tight whitespace-nowrap text-transparent sm:text-2xl">
+                <dd className="bg-linear-to-r from-signal-hot to-iris-hot bg-clip-text font-display text-xl leading-none font-bold tracking-tight whitespace-nowrap text-transparent sm:text-3xl">
                   {s.value}
                 </dd>
-                <dd className="text-[10px] leading-tight text-bone sm:text-xs sm:whitespace-nowrap" aria-hidden>
+                <dd className="font-mono text-[10px] leading-tight tracking-[0.06em] text-bone uppercase sm:text-[11px] sm:whitespace-nowrap" aria-hidden>
                   {s.label}
                 </dd>
               </div>
