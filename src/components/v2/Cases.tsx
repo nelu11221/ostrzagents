@@ -111,7 +111,6 @@ function CaseCard({ item, ctaHref }: { item: CaseStudy; ctaHref: string }) {
     ...(item.shots ?? []),
     ...(item.videos ?? []).map((v) => ({ src: v.poster, alt: v.alt, video: v.src, duration: v.duration })),
   ]
-  const hasVideos = (item.videos ?? []).length > 0
   // Черновые цифры показываем только при разработке — на сайт попадают лишь подтверждённые
   const showStats = !item.draftStats || import.meta.env.DEV
   const headline = showStats ? item.headline : undefined
@@ -197,10 +196,12 @@ function CaseCard({ item, ctaHref }: { item: CaseStudy; ctaHref: string }) {
             aria-hidden
           />
           <div className="grid-lines absolute inset-0 [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_75%)]" aria-hidden />
-          <p className="label relative mb-6 text-smoke max-sm:hidden">{hasVideos ? c.videosLabel : item.product === 'sales' ? c.salesShotsLabel : c.shotsLabel}</p>
+          <p className="label relative mb-6 text-smoke max-sm:hidden">{item.product === 'leadgen' ? c.shotsLabel : item.shots?.length ? c.salesShotsLabel : c.videosLabel}</p>
           <div className="relative flex items-center justify-center">
             {shots.map((shot, i) => {
               const offset = i - (shots.length - 1) / 2
+              // 4+ элементов — веер плотнее и мельче, чтобы влез в колонку
+              const dense = shots.length > 3
               const duration = shot.duration
               return (
                 <button
@@ -208,8 +209,11 @@ function CaseCard({ item, ctaHref }: { item: CaseStudy; ctaHref: string }) {
                   type="button"
                   onClick={() => setOpenShot(i)}
                   aria-label={`${duration ? c.videoLabel : c.shotLabel}: ${shot.alt}`}
-                  style={{ transform: `rotate(${offset * 6}deg) translateY(${Math.abs(offset) * 18}px)`, zIndex: offset === 0 ? 2 : 1 }}
-                  className="relative -mx-3 w-[17vw] max-w-[190px] shrink-0 cursor-zoom-in overflow-hidden shadow-[0_30px_60px_-20px_rgba(0,0,0,.8)] ring-1 ring-white/15 transition-[translate] duration-300 hover:z-10 hover:-translate-y-3 sm:-mx-8 sm:w-[190px]"
+                  style={{ transform: `rotate(${offset * (dense ? 4 : 6)}deg) translateY(${Math.abs(offset) * (dense ? 10 : 18)}px)`, zIndex: Math.round(10 - Math.abs(offset) * 2) }}
+                  className={cx(
+                    'relative shrink-0 cursor-zoom-in overflow-hidden shadow-[0_30px_60px_-20px_rgba(0,0,0,.8)] ring-1 ring-white/15 transition-[translate] duration-300 hover:z-10 hover:-translate-y-3',
+                    dense ? '-mx-2.5 w-[15vw] max-w-[150px] sm:-mx-9 sm:w-[150px]' : '-mx-3 w-[17vw] max-w-[190px] sm:-mx-8 sm:w-[190px]',
+                  )}
                 >
                   <img src={shot.src} alt={shot.alt} loading="lazy" className="aspect-[9/15] w-full object-cover object-top" />
                   {duration && (
