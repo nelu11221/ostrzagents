@@ -106,13 +106,19 @@ function CaseCard({ item, ctaHref }: { item: CaseStudy; ctaHref: string }) {
   const c = cases
   const tone = TONE[item.product]
   const [openShot, setOpenShot] = useState<number | null>(null)
+  // Скрины и записи экрана — один веер и один просмотрщик
+  const shots: { src: string; alt: string; video?: string; duration?: string }[] = [
+    ...(item.shots ?? []),
+    ...(item.videos ?? []).map((v) => ({ src: v.poster, alt: v.alt, video: v.src, duration: v.duration })),
+  ]
+  const hasVideos = (item.videos ?? []).length > 0
   // Черновые цифры показываем только при разработке — на сайт попадают лишь подтверждённые
   const showStats = !item.draftStats || import.meta.env.DEV
   const headline = showStats ? item.headline : undefined
   const metrics = showStats ? item.metrics : undefined
 
   return (
-    <article className="notch grid overflow-hidden bg-ink [--notch:32px] lg:grid-cols-[1.1fr_0.9fr]">
+    <article className={cx('notch grid overflow-hidden bg-ink [--notch:32px]', shots.length > 0 && 'lg:grid-cols-[1.1fr_0.9fr]')}>
       <div className="flex flex-col p-5 sm:p-10 lg:p-12">
         <p className="label text-smoke max-sm:hidden">{item.tag}</p>
         <h3 className="font-display text-xl font-semibold tracking-tight sm:mt-3 sm:text-3xl">{item.name}</h3>
@@ -133,7 +139,7 @@ function CaseCard({ item, ctaHref }: { item: CaseStudy; ctaHref: string }) {
         )}
 
         {metrics && (
-          <dl className="mt-3 grid grid-cols-4 gap-px bg-white/10 sm:mt-8">
+          <dl className={cx('mt-3 grid gap-px bg-white/10 sm:mt-8', metrics.length === 3 ? 'grid-cols-3' : cx('grid-cols-4', shots.length > 0 && 'lg:grid-cols-2'))}>
             {metrics.map((m) => (
               <div key={m.label} className="bg-ink px-1.5 py-2.5 sm:p-4">
                 <dd className="font-display text-[13px] font-bold whitespace-nowrap tracking-tight sm:text-xl">{m.value}</dd>
@@ -170,37 +176,52 @@ function CaseCard({ item, ctaHref }: { item: CaseStudy; ctaHref: string }) {
       </div>
 
       {/* Скрины лидов веером; клик — просмотр поверх страницы */}
-      <div className="relative flex flex-col items-center justify-center overflow-hidden px-6 pt-1 pb-5 sm:min-h-[560px] sm:py-12">
-        <div
-          className={cx(
-            'absolute inset-0',
-            item.product === 'sales'
-              ? 'bg-[radial-gradient(ellipse_at_center,rgba(168,85,247,.28),transparent_65%)]'
-              : 'bg-[radial-gradient(ellipse_at_center,rgba(51,116,255,.28),transparent_65%)]',
-          )}
-          aria-hidden
-        />
-        <div className="grid-lines absolute inset-0 [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_75%)]" aria-hidden />
-        <p className="label relative mb-6 text-smoke max-sm:hidden">{c.shotsLabel}</p>
-        <div className="relative flex items-center justify-center">
-          {item.shots.map((shot, i) => {
-            const offset = i - (item.shots.length - 1) / 2
-            return (
-              <button
-                key={shot.src}
-                type="button"
-                onClick={() => setOpenShot(i)}
-                aria-label={`${c.shotLabel}: ${shot.alt}`}
-                style={{ transform: `rotate(${offset * 6}deg) translateY(${Math.abs(offset) * 18}px)`, zIndex: offset === 0 ? 2 : 1 }}
-                className="relative -mx-3 w-[19vw] max-w-[190px] shrink-0 cursor-zoom-in overflow-hidden shadow-[0_30px_60px_-20px_rgba(0,0,0,.8)] ring-1 ring-white/15 transition-[translate] duration-300 hover:z-10 hover:-translate-y-3 sm:-mx-8 sm:w-[190px]"
-              >
-                <img src={shot.src} alt={shot.alt} loading="lazy" className="aspect-[9/15] w-full object-cover object-top" />
-              </button>
-            )
-          })}
+      {shots.length > 0 && (
+        <div className="relative flex flex-col items-center justify-center overflow-hidden px-6 pt-1 pb-2 sm:min-h-[560px] sm:py-12">
+          <div
+            className={cx(
+              'absolute inset-0',
+              item.product === 'sales'
+                ? 'bg-[radial-gradient(ellipse_at_center,rgba(168,85,247,.28),transparent_65%)]'
+                : 'bg-[radial-gradient(ellipse_at_center,rgba(51,116,255,.28),transparent_65%)]',
+            )}
+            aria-hidden
+          />
+          <div className="grid-lines absolute inset-0 [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_75%)]" aria-hidden />
+          <p className="label relative mb-6 text-smoke max-sm:hidden">{hasVideos ? c.videosLabel : c.shotsLabel}</p>
+          <div className="relative flex items-center justify-center">
+            {shots.map((shot, i) => {
+              const offset = i - (shots.length - 1) / 2
+              const duration = shot.duration
+              return (
+                <button
+                  key={shot.src}
+                  type="button"
+                  onClick={() => setOpenShot(i)}
+                  aria-label={`${duration ? c.videoLabel : c.shotLabel}: ${shot.alt}`}
+                  style={{ transform: `rotate(${offset * 6}deg) translateY(${Math.abs(offset) * 18}px)`, zIndex: offset === 0 ? 2 : 1 }}
+                  className="relative -mx-3 w-[17vw] max-w-[190px] shrink-0 cursor-zoom-in overflow-hidden shadow-[0_30px_60px_-20px_rgba(0,0,0,.8)] ring-1 ring-white/15 transition-[translate] duration-300 hover:z-10 hover:-translate-y-3 sm:-mx-8 sm:w-[190px]"
+                >
+                  <img src={shot.src} alt={shot.alt} loading="lazy" className="aspect-[9/15] w-full object-cover object-top" />
+                  {duration && (
+                    <>
+                      <span className="absolute inset-0 grid place-items-center bg-ink/25" aria-hidden>
+                        <span className={cx('grid size-11 place-items-center rounded-full text-white shadow-lg ring-4 ring-white/20 sm:size-14', tone.solid)}>
+                          <svg viewBox="0 0 24 24" className="ml-0.5 size-5 sm:size-6" fill="currentColor">
+                            <path d="M7 4.5v15L20 12Z" />
+                          </svg>
+                        </span>
+                      </span>
+                      <span className="absolute right-1.5 bottom-1.5 bg-ink/80 px-1.5 py-0.5 font-mono text-[10px] text-paper">{duration}</span>
+                    </>
+                  )}
+                </button>
+              )
+            })}
+          </div>
         </div>
-      </div>
-      <Lightbox images={item.shots} index={openShot} onChange={setOpenShot} />
+      )}
+      <Lightbox images={shots} index={openShot} onChange={setOpenShot} />
     </article>
   )
 }

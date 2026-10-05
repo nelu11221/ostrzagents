@@ -201,7 +201,11 @@ function PlanCard({
 
       <div className={cx('mt-4 border-t pt-3 sm:mt-5 sm:pt-4', light ? 'border-ink/10' : 'border-white/10')}>
         <p className="flex flex-wrap items-baseline gap-x-2">
-          <span className="font-display text-[2.6rem] leading-none font-bold tracking-[-0.055em] tabular-nums">${price}</span>
+          <span className="font-display text-[2.6rem] leading-none font-bold tracking-[-0.055em] tabular-nums">
+            {/* Знак доллара меньше и приподнят — не сливается с цифрами */}
+            <span className="mr-0.5 align-[0.55em] text-[0.5em] tracking-normal">$</span>
+            {price}
+          </span>
           <span className={cx('text-sm', light ? 'text-ink/55' : 'text-bone')}>{suffix}</span>
         </p>
         <p className={cx('mt-1 min-h-5 font-mono text-xs sm:mt-2', light ? 'text-ink/50' : 'text-smoke')}>

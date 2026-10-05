@@ -34,7 +34,7 @@ export default function Landing() {
       </a>
       <Header contactUrl={consultHref} ctaHref={trialHref} ctaLabel={v2.headerCta} nav={v2.nav} />
       <main id="main">
-        <Hero trialHref={trialHref} />
+        <Hero />
         <Ticker />
         <Modules tab={tab} onTab={setTab} trialHref={moduleTrialHref} />
         <Cases

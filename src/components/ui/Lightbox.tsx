@@ -2,7 +2,8 @@ import { useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { Arrow, cx } from './primitives'
 
-type Image = { src: string; alt: string }
+// video — вместо картинки показываем ролик (src тогда служит постером)
+type Image = { src: string; alt: string; video?: string }
 
 type Props = {
   images: Image[]
@@ -56,7 +57,19 @@ export function Lightbox({ images, index, onChange }: Props) {
       )}
 
       <figure className="flex max-h-full min-w-0 flex-col items-center" onClick={(e) => e.stopPropagation()}>
-        <img src={image.src} alt={image.alt} className="max-h-[calc(100svh-7rem)] w-auto max-w-full object-contain shadow-[0_40px_120px_-30px_rgba(0,0,0,.9)]" />
+        {image.video ? (
+          <video
+            key={image.video}
+            src={image.video}
+            poster={image.src}
+            controls
+            autoPlay
+            playsInline
+            className="max-h-[calc(100svh-7rem)] w-auto max-w-full bg-black shadow-[0_40px_120px_-30px_rgba(0,0,0,.9)]"
+          />
+        ) : (
+          <img src={image.src} alt={image.alt} className="max-h-[calc(100svh-7rem)] w-auto max-w-full object-contain shadow-[0_40px_120px_-30px_rgba(0,0,0,.9)]" />
+        )}
         <figcaption className="mt-3 text-center font-mono text-xs text-bone">
           {image.alt} · {index + 1} / {count}
         </figcaption>

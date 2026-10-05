@@ -5,7 +5,7 @@ import { Button, Container, cx } from '../ui/primitives'
 
 // Hero v2: центрированный заголовок на всю ширину + горизонтальный «конвейер» продукта под ним:
 // чаты (синий, Лидоген) → AI-фильтр → личка (фиолетовый, AI-сейлз).
-export function Hero({ trialHref }: { trialHref: string }) {
+export function Hero() {
   const h = v2.hero
   return (
     <section id="top" className="grain relative overflow-hidden pt-22 pb-12 sm:pt-36 sm:pb-20 lg:pb-28">
@@ -36,12 +36,13 @@ export function Hero({ trialHref }: { trialHref: string }) {
             </span>
           </h1>
 
-          <p style={{ animationDelay: '0.26s' }} className="animate-rise mx-auto mt-4 max-w-2xl text-[15px] leading-relaxed text-balance text-bone sm:mt-7 sm:text-lg">
+          <p style={{ animationDelay: '0.26s' }} className="animate-rise mx-auto mt-4 max-w-2xl text-[15px] leading-relaxed whitespace-pre-line text-bone sm:mt-7 sm:text-lg">
             {h.sub}
           </p>
 
           <div style={{ animationDelay: '0.34s' }} className="animate-rise mt-7 flex flex-col justify-center gap-3 sm:mt-9 sm:flex-row">
-            <Button href={trialHref} target="_blank" rel="noreferrer" size="lg" variant="duo">
+            {/* Тест на 3 дня — сначала к тарифам, где видно цены теста */}
+            <Button href="#pricing" size="lg" variant="duo">
               {h.cta}
             </Button>
             <Button href="#modules" variant="ghost" size="lg" className="max-sm:hidden">
