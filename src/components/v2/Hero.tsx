@@ -15,16 +15,23 @@ export function Hero() {
       {/* pointer-events пропускаются к пиксельному фону (ripple по клику), кроме кнопок и ссылок */}
       <Container className="pointer-events-none relative z-10 [&_a]:pointer-events-auto [&_button]:pointer-events-auto">
         <div className="mx-auto max-w-6xl text-center">
-          <p
+          {/* Цифры агентства вместо строки-eyebrow */}
+          <dl
             style={{ animationDelay: '0s' }}
-            className="animate-rise mx-auto inline-flex items-center gap-3 border border-white/15 bg-ink/85 px-4 py-2 font-mono text-[11px] tracking-[0.12em] text-paper uppercase backdrop-blur-sm"
+            className="animate-rise mx-auto grid max-w-2xl grid-cols-3 divide-x divide-white/10 border border-white/15 bg-ink/85 backdrop-blur-sm"
           >
-            <span className="flex gap-1" aria-hidden>
-              <span className="size-1.5 animate-rec bg-signal-hot" />
-              <span className="size-1.5 animate-rec bg-iris-hot [animation-delay:.7s]" />
-            </span>
-            {h.eyebrow}
-          </p>
+            {h.stats.map((s) => (
+              <div key={s.label} className="flex flex-col items-center justify-center gap-0.5 px-2 py-2 sm:flex-row sm:gap-3 sm:px-4 sm:py-3">
+                <dt className="sr-only">{s.label}</dt>
+                <dd className="bg-linear-to-r from-signal-hot to-iris-hot bg-clip-text font-display text-lg leading-none font-bold tracking-tight whitespace-nowrap text-transparent sm:text-2xl">
+                  {s.value}
+                </dd>
+                <dd className="text-[10px] leading-tight text-bone sm:text-left sm:text-xs" aria-hidden>
+                  {s.label}
+                </dd>
+              </div>
+            ))}
+          </dl>
 
           <h1 className="mt-6 font-display text-[1.7rem] sm:mt-8 sm:text-[clamp(2rem,4.4vw,3.9rem)] leading-[1.02] font-bold tracking-[-0.045em] text-balance">
             <span style={{ animationDelay: '0.08s' }} className="animate-rise block">{h.titleA}</span>

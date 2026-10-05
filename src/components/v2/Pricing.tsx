@@ -70,7 +70,7 @@ export function Pricing({ planHref, setupHref, title, id = 'pricing' }: Props) {
   return (
     <section
       id={id}
-      className="grain relative flex scroll-mt-16 flex-col justify-center overflow-hidden border-t border-white/10 py-6 sm:py-16 lg:min-h-[calc(100svh-72px)] lg:py-12"
+      className="grain relative flex scroll-mt-16 flex-col justify-center overflow-hidden border-t border-white/10 py-6 sm:py-16 lg:min-h-[calc(100svh-72px)] lg:py-7"
     >
       <div className="absolute -bottom-40 -left-40 size-[560px] rounded-full bg-signal/20 blur-[140px]" aria-hidden />
       <div className="absolute -right-40 -bottom-40 size-[560px] rounded-full bg-iris/20 blur-[140px]" aria-hidden />
@@ -106,7 +106,7 @@ export function Pricing({ planHref, setupHref, title, id = 'pricing' }: Props) {
           </div>
         </div>
 
-        <div ref={cardsRef} className="pointer-events-auto mt-3 flex snap-x snap-mandatory overflow-x-auto [scrollbar-width:none] sm:mt-8 md:grid md:grid-cols-3 md:items-stretch md:gap-4 md:overflow-visible">
+        <div ref={cardsRef} className="pointer-events-auto mt-3 flex snap-x snap-mandatory overflow-x-auto [scrollbar-width:none] sm:mt-8 lg:mt-5 md:grid md:grid-cols-3 md:items-stretch md:gap-4 md:overflow-visible">
           {pricing.plans.map((plan) => (
             <PlanCard key={plan.id} plan={plan} period={period} suffix={current.suffix} planHref={planHref} />
           ))}
@@ -135,27 +135,33 @@ export function Pricing({ planHref, setupHref, title, id = 'pricing' }: Props) {
           })}
         </div>
 
-        <div className="mt-2 flex flex-col gap-4 sm:mt-6 lg:flex-row lg:items-center lg:justify-between">
-          <p className="flex items-center gap-2 font-mono text-xs text-paper max-sm:hidden">
-            <span className="size-1.5 shrink-0 bg-iris" aria-hidden />
-            {pricing.dialogNote}
-          </p>
-          {/* Настройка под ключ — отдельная опция, а не часть тарифа */}
-          <a
-            href={setupHref}
-            target="_blank"
-            rel="noreferrer"
-            className="group notch inline-flex shrink-0 items-center gap-3 self-stretch bg-white/5 py-1.5 pr-1.5 pl-3 text-[13px] leading-snug ring-1 sm:self-start sm:py-2 sm:pr-2 sm:pl-4 sm:text-sm ring-inset ring-white/15 transition-colors [--notch:10px] hover:bg-white/10 lg:self-auto"
-          >
-            <span className="text-bone">
-              {pricing.setup.text} <b className="font-semibold whitespace-nowrap text-paper">{pricing.setup.price}</b>
+        <p className="mt-3 flex items-center gap-2 font-mono text-xs text-paper max-sm:hidden">
+          <span className="size-1.5 shrink-0 bg-iris" aria-hidden />
+          {pricing.dialogNote}
+        </p>
+
+        {/* Настройка под ключ с гарантией — отдельное предложение под тарифами */}
+        <a
+          href={setupHref}
+          target="_blank"
+          rel="noreferrer"
+          className="group notch relative mt-2 block bg-linear-to-r from-signal-btn to-iris-btn p-px [--notch:14px] sm:mt-3 sm:[--notch:22px]"
+        >
+          <span className="notch flex items-center gap-3 bg-ink-2 py-2 pr-2 pl-3 transition-colors [--notch:13px] group-hover:bg-ink-3 sm:gap-6 sm:p-6 sm:[--notch:21px] lg:px-8 lg:py-4">
+            <span className="min-w-0 flex-1">
+              <span className="block text-[13px] leading-snug text-paper sm:hidden">
+                {pricing.setup.short} <b className="font-semibold whitespace-nowrap">{pricing.setup.price}</b>
+              </span>
+              <span className="block font-display text-xl font-semibold tracking-tight max-sm:hidden">{pricing.setup.title}</span>
+              <span className="mt-1 block text-sm leading-snug text-bone max-sm:hidden lg:text-[15px]">{pricing.setup.text}</span>
             </span>
-            <span className="inline-flex h-8 items-center gap-1.5 bg-paper px-3 font-display text-xs font-semibold text-ink transition-colors group-hover:bg-white">
+            <span className="font-display text-2xl font-bold tracking-tight whitespace-nowrap max-sm:hidden lg:text-3xl">{pricing.setup.price}</span>
+            <span className="inline-flex h-8 shrink-0 items-center gap-1.5 bg-paper px-3 font-display text-xs font-semibold text-ink transition-colors group-hover:bg-white sm:h-12 sm:gap-2 sm:px-6 sm:text-base">
               {pricing.setup.cta}
-              <Arrow className="size-3.5 transition-transform group-hover:translate-x-0.5" />
+              <Arrow className="size-3.5 transition-transform group-hover:translate-x-0.5 sm:size-4" />
             </span>
-          </a>
-        </div>
+          </span>
+        </a>
       </Container>
     </section>
   )
