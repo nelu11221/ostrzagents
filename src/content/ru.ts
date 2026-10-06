@@ -572,10 +572,6 @@ export const cases = {
         { src: '/media/cases/sales-arbitrage-2.jpg', alt: 'AI доводит человека до депозита' },
         { src: '/media/cases/sales-arbitrage-3.jpg', alt: 'Статистика клиента: 5 479 депозитов на $106 656' },
       ],
-      videos: [
-        { src: '/media/cases/sales-arbitrage-v1.mp4', poster: '/media/cases/sales-arbitrage-v1.jpg', alt: 'AI ведёт клиента до оплаты', duration: '0:15' },
-        { src: '/media/cases/sales-arbitrage-v2.mp4', poster: '/media/cases/sales-arbitrage-v2.jpg', alt: 'AI договаривается об оплате частями в USDT', duration: '0:22' },
-      ],
     },
     {
       id: 'sales-edu',
@@ -598,6 +594,8 @@ export const cases = {
       ],
       videos: [
         { src: '/media/cases/sales-edu-1.mp4', poster: '/media/cases/sales-edu-1.jpg', alt: 'Диалог от заявки до оплаты обучения', duration: '0:29' },
+        { src: '/media/cases/sales-edu-2.mp4', poster: '/media/cases/sales-edu-2.jpg', alt: 'AI ведёт клиента до оплаты', duration: '0:15' },
+        { src: '/media/cases/sales-edu-3.mp4', poster: '/media/cases/sales-edu-3.jpg', alt: 'AI договаривается об оплате частями в USDT', duration: '0:22' },
       ],
     },
   ] as CaseStudy[],
