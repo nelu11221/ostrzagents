@@ -5,11 +5,13 @@ import NotFound from './pages/NotFound'
 import Placeholder from './pages/Placeholder'
 import ProductPage from './pages/ProductPage'
 import { ScrollManager } from './components/ui/ScrollManager'
+import { LeadGate } from './components/v2/Lead'
 
 export default function App() {
   return (
     <BrowserRouter>
       <ScrollManager />
+      <LeadGate />
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/v1" element={<LandingV1 />} />

@@ -6,6 +6,13 @@
   # Vite 8 requires Node 20.19+ / 22.12+
   NODE_VERSION = "22"
 
+# Заявки с формы — в Netlify Function (netlify/functions/lead.mjs); правило стоит раньше общего прокси /api/*
+[[redirects]]
+  from = "/api/lead"
+  to = "/.netlify/functions/lead"
+  status = 200
+  force = true
+
 # API бэкенда (FastAPI на VPS) — проксируем через Netlify, чтобы фронт ходил на /api с того же домена
 [[redirects]]
   from = "/api/*"

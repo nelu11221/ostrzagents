@@ -5,6 +5,7 @@ import { Ticker } from '../components/landing/HowItWorks'
 import { Cases } from '../components/v2/Cases'
 import { Faq } from '../components/v2/Faq'
 import { FinalCta } from '../components/v2/FinalCta'
+import { LeadSection } from '../components/v2/Lead'
 import { Hero } from '../components/v2/Hero'
 import { Modules, type ModuleTab } from '../components/v2/Modules'
 import { Pricing } from '../components/v2/Pricing'
@@ -45,6 +46,7 @@ export default function Landing() {
         <Pricing planHref={planHref} setupHref={tgLink(contact, msg.setup)} />
         <Faq />
         <FinalCta trialHref={trialHref} consultHref={consultHref} />
+        <LeadSection fallbackHref={consultHref} />
       </main>
       <Footer contact={contact} nav={v2.nav} />
       <MobileCta contactUrl={trialHref} label={v2.mobileCta} showIn="faq" />
