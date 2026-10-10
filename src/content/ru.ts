@@ -615,9 +615,6 @@ export const lead = {
     ],
     // методы, для которых поле — телефон (цифровая клавиатура)
     phoneMethods: ['whatsapp', 'phone'],
-    niche: 'Ваша ниша',
-    optional: 'необязательно',
-    nichePlaceholder: 'Например: стоматология, мебель, онлайн-школа',
     consentA: 'Согласен(на) на обработку персональных данных и с ',
     consentLink: 'политикой конфиденциальности',
     privacyHref: 'https://ostroai.com/privacy',
@@ -631,7 +628,9 @@ export const lead = {
   },
   success: {
     title: 'Заявка принята',
-    text: 'Мы свяжемся с вами в ближайшее рабочее время. Хотите быстрее — напишите в Telegram.',
-    cta: 'Написать в Telegram',
+    text: 'Мы свяжемся с вами в ближайшее рабочее время. Хотите быстрее — напишите нам сами.',
+    telegram: 'Telegram',
+    whatsappLabel: 'WhatsApp',
+    whatsapp: '+375291711721',
   },
 }

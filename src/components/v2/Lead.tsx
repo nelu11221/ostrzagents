@@ -71,6 +71,19 @@ function LeadModal({ tgHref, onClose }: { tgHref: string; onClose: () => void })
   )
 }
 
+// WhatsApp с тем же готовым сообщением, что у кнопки Telegram
+function waLink(phone: string, text: string) {
+  return `https://wa.me/${phone.replace(/\D/g, '')}${text ? `?text=${encodeURIComponent(text)}` : ''}`
+}
+
+function WhatsAppIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden>
+      <path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z" />
+    </svg>
+  )
+}
+
 // Текст готового сообщения из ссылки t.me/…?text= — по нему видно, с какой кнопки пришла заявка
 function intentOf(href: string) {
   try {
@@ -92,7 +105,6 @@ function LeadForm({ tgHref }: { tgHref: string }) {
     e.preventDefault()
     const data = new FormData(e.currentTarget)
     const contact = String(data.get('contact') ?? '').trim()
-    const niche = String(data.get('niche') ?? '').trim()
     const company = String(data.get('company') ?? '')
     const next: Errors = {}
     if (contact.length < 3) next.contact = f.errors.contact
@@ -102,7 +114,7 @@ function LeadForm({ tgHref }: { tgHref: string }) {
 
     setStatus('sending')
     try {
-      await submitLead({ name: '', method, contact, niche, intent: intentOf(tgHref), page: window.location.href, utm: readUtm(), company })
+      await submitLead({ name: '', method, contact, niche: '', intent: intentOf(tgHref), page: window.location.href, utm: readUtm(), company })
       setStatus('done')
     } catch {
       setErrors({ server: f.errors.server })
@@ -121,15 +133,25 @@ function LeadForm({ tgHref }: { tgHref: string }) {
           </div>
           <h3 className="mt-6 font-display text-2xl font-semibold">{l.success.title}</h3>
           <p className="mx-auto mt-3 max-w-sm text-ink/65">{l.success.text}</p>
-          <a
-            href={tgHref}
-            data-direct
-            target="_blank"
-            rel="noreferrer"
-            className="notch mt-8 inline-flex h-12 items-center gap-2 bg-ink px-6 font-display text-sm font-semibold text-paper [--notch:12px]"
-          >
-            <TelegramIcon className="size-4" /> {l.success.cta}
-          </a>
+          <div className="mt-8 grid gap-2 sm:grid-cols-2">
+            <a
+              href={tgHref}
+              data-direct
+              target="_blank"
+              rel="noreferrer"
+              className="notch inline-flex h-12 items-center justify-center gap-2 bg-ink px-5 font-display text-sm font-semibold text-paper transition-colors [--notch:12px] hover:bg-ink-3"
+            >
+              <TelegramIcon className="size-4" /> {l.success.telegram}
+            </a>
+            <a
+              href={waLink(l.success.whatsapp, intentOf(tgHref))}
+              target="_blank"
+              rel="noreferrer"
+              className="notch inline-flex h-12 items-center justify-center gap-2 bg-[#1f9e4f] px-5 font-display text-sm font-semibold text-white transition-colors [--notch:12px] hover:bg-[#25b35a]"
+            >
+              <WhatsAppIcon className="size-4" /> {l.success.whatsappLabel}
+            </a>
+          </div>
         </div>
       ) : (
         <form noValidate onSubmit={onSubmit} className="space-y-4 sm:space-y-6">
@@ -163,10 +185,6 @@ function LeadForm({ tgHref }: { tgHref: string }) {
               aria-describedby={errors.contact ? 'lead-contact-err' : undefined}
               className={inputCls(!!errors.contact)}
             />
-          </Field>
-
-          <Field id="lead-niche" label={f.niche} optional={f.optional}>
-            <input id="lead-niche" name="niche" placeholder={f.nichePlaceholder} className={inputCls(false)} />
           </Field>
 
           {/* ловушка для ботов: поле скрыто от людей, заполненные заявки сервер отбрасывает */}
