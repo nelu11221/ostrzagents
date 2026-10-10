@@ -9,7 +9,6 @@ import { SmartLink } from '../components/ui/SmartLink'
 import { VideoCard } from '../components/ui/VideoCard'
 import { Faq } from '../components/v2/Faq'
 import { FinalCta } from '../components/v2/FinalCta'
-import { LeadSection } from '../components/v2/Lead'
 import { Pricing } from '../components/v2/Pricing'
 import { pricing, products, v2 } from '../content/ru'
 import { tgLink } from '../lib/contact'
@@ -146,7 +145,6 @@ export default function ProductPage({ id }: { id: ProductId }) {
         </section>
 
         <FinalCta trialHref={trialHref} consultHref={consultHref} />
-        <LeadSection fallbackHref={consultHref} />
       </main>
       <Footer contact={contact} nav={v2.nav} />
       <MobileCta contactUrl={trialHref} label={product.cta} />

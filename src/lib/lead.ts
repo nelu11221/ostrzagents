@@ -1,5 +1,5 @@
 export type LeadPayload = {
-  name: string
+  name: string // в форме не спрашиваем, поле оставлено для таблицы
   method: string
   contact: string
   niche: string

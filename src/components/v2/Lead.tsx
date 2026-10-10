@@ -1,83 +1,73 @@
-import { useEffect, useState, useSyncExternalStore, type FormEvent, type ReactNode } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useEffect, useRef, useState, type FormEvent, type ReactNode } from 'react'
+import { createPortal } from 'react-dom'
 import { lead as l } from '../../content/ru'
 import { readUtm, submitLead } from '../../lib/lead'
-import { PixelBg } from '../effects/PixelBg'
-import { Arrow, Container, Label, Reveal, TelegramIcon, cx } from '../ui/primitives'
+import { Arrow, TelegramIcon, cx } from '../ui/primitives'
 
-type Errors = Partial<Record<'name' | 'contact' | 'consent' | 'server', string>>
+type Errors = Partial<Record<'contact' | 'consent' | 'server', string>>
 
-// С какой кнопки человек пришёл к форме: ссылка t.me/… этой кнопки (её готовое сообщение уходит в заявку
-// и подставляется в «Написать в Telegram» после отправки).
-let intentHref: string | null = null
-const listeners = new Set<() => void>()
-function setIntent(href: string | null) {
-  intentHref = href
-  listeners.forEach((fn) => fn())
-}
-function useIntent() {
-  return useSyncExternalStore(
-    (fn) => (listeners.add(fn), () => listeners.delete(fn)),
-    () => intentHref,
-  )
-}
-
-// Любая кнопка, ведущая в Telegram (https://t.me/…), ведёт к форме заявки внизу страницы: у части людей Telegram
-// не открывается, а контакт мы получим в любом случае. Ссылка с data-direct уходит в Telegram напрямую.
+// Любая кнопка, ведущая в Telegram (https://t.me/…), сначала открывает форму заявки во всплывающем окне: у части
+// людей Telegram не открывается, а контакт мы получим в любом случае. Ссылка с data-direct уходит в Telegram напрямую.
 export function LeadGate() {
-  const navigate = useNavigate()
+  const [href, setHref] = useState<string | null>(null)
 
   useEffect(() => {
     const onClick = (e: MouseEvent) => {
       if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return
       const link = (e.target as Element | null)?.closest?.('a[href^="https://t.me/"]')
-      if (!link || link.hasAttribute('data-direct') || link.closest('#lead')) return
+      if (!link || link.hasAttribute('data-direct')) return
       e.preventDefault()
-      setIntent(link.getAttribute('href'))
-      const section = document.getElementById('lead')
-      if (!section) {
-        navigate('/#lead')
-        return
-      }
-      section.scrollIntoView({ behavior: 'smooth', block: 'start' })
-      // фокус без прокрутки — иначе браузер дёрнет страницу раньше плавного скролла
-      window.setTimeout(() => document.getElementById('lead-name')?.focus({ preventScroll: true }), 600)
+      setHref(link.getAttribute('href'))
     }
     document.addEventListener('click', onClick)
     return () => document.removeEventListener('click', onClick)
-  }, [navigate])
+  }, [])
 
-  return null
+  return href ? <LeadModal tgHref={href} onClose={() => setHref(null)} /> : null
 }
 
-// Последний блок страницы: заявка (как на сайте агентства). fallbackHref — Telegram, если человек дошёл до формы сам.
-export function LeadSection({ fallbackHref }: { fallbackHref: string }) {
-  const tgHref = useIntent() ?? fallbackHref
-  return (
-    <section id="lead" className="grain relative scroll-mt-16 overflow-hidden border-t border-white/10 bg-ink-2 py-14 sm:py-24 lg:py-32">
-      <PixelBg className="[mask-image:radial-gradient(ellipse_32%_45%_at_24%_52%,transparent_40%,black_100%)]" opacity={0.4} density={0.9} />
-      <Container className="relative z-10 grid gap-8 sm:gap-14 lg:grid-cols-[1fr_1.05fr] lg:items-center lg:gap-20">
-        <Reveal>
-          <Label>{l.label}</Label>
-          <h2 className="mt-4 font-display text-[clamp(1.7rem,4.6vw,3.6rem)] leading-[1.02] font-semibold tracking-[-0.03em] text-balance sm:mt-5">
-            {l.title}
-          </h2>
-          <p className="mt-4 max-w-lg leading-relaxed text-bone sm:mt-5 sm:text-lg">{l.sub}</p>
-          <ul className="mt-6 space-y-3 sm:mt-10 sm:space-y-4">
-            {l.gets.map((g, i) => (
-              <li key={g} className="flex items-center gap-3 sm:gap-4">
-                <span className="grid size-8 shrink-0 place-items-center bg-signal-btn font-mono text-xs text-white sm:size-9">0{i + 1}</span>
-                <span className="sm:text-lg">{g}</span>
-              </li>
-            ))}
-          </ul>
-        </Reveal>
+function LeadModal({ tgHref, onClose }: { tgHref: string; onClose: () => void }) {
+  const dialog = useRef<HTMLDivElement>(null)
 
-        <Reveal delay={0.1}>
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose()
+    const overflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    window.addEventListener('keydown', onKey)
+    dialog.current?.focus()
+    return () => {
+      document.body.style.overflow = overflow
+      window.removeEventListener('keydown', onKey)
+    }
+  }, [onClose])
+
+  return createPortal(
+    <div
+      ref={dialog}
+      role="dialog"
+      aria-modal="true"
+      aria-label={l.title}
+      tabIndex={-1}
+      className="animate-rise fixed inset-0 z-[100] overflow-y-auto overscroll-contain bg-ink/85 backdrop-blur-sm outline-none [animation-duration:.25s]"
+      onClick={onClose}
+    >
+      <div className="flex min-h-full items-center justify-center p-3 sm:p-6">
+        <div className="relative w-full max-w-xl" onClick={(e) => e.stopPropagation()}>
+          <button
+            type="button"
+            aria-label={l.close}
+            onClick={onClose}
+            className="absolute -top-12 right-0 grid size-10 place-items-center bg-white/10 text-paper ring-1 ring-white/20 transition-colors ring-inset hover:bg-white/20"
+          >
+            <svg viewBox="0 0 20 20" className="size-4" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
+              <path d="m5 5 10 10M15 5 5 15" />
+            </svg>
+          </button>
           <LeadForm tgHref={tgHref} />
-        </Reveal>
-      </Container>
-    </section>
+        </div>
+      </div>
+    </div>,
+    document.body,
   )
 }
 
@@ -101,12 +91,10 @@ function LeadForm({ tgHref }: { tgHref: string }) {
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
     const data = new FormData(e.currentTarget)
-    const name = String(data.get('name') ?? '').trim()
     const contact = String(data.get('contact') ?? '').trim()
     const niche = String(data.get('niche') ?? '').trim()
     const company = String(data.get('company') ?? '')
     const next: Errors = {}
-    if (!name) next.name = f.errors.name
     if (contact.length < 3) next.contact = f.errors.contact
     if (!data.get('consent')) next.consent = f.errors.consent
     setErrors(next)
@@ -114,7 +102,7 @@ function LeadForm({ tgHref }: { tgHref: string }) {
 
     setStatus('sending')
     try {
-      await submitLead({ name, method, contact, niche, intent: intentOf(tgHref), page: window.location.href, utm: readUtm(), company })
+      await submitLead({ name: '', method, contact, niche, intent: intentOf(tgHref), page: window.location.href, utm: readUtm(), company })
       setStatus('done')
     } catch {
       setErrors({ server: f.errors.server })
@@ -145,17 +133,6 @@ function LeadForm({ tgHref }: { tgHref: string }) {
         </div>
       ) : (
         <form noValidate onSubmit={onSubmit} className="space-y-4 sm:space-y-6">
-          <Field id="lead-name" label={f.name} error={errors.name}>
-            <input
-              id="lead-name"
-              name="name"
-              autoComplete="given-name"
-              aria-invalid={!!errors.name}
-              aria-describedby={errors.name ? 'lead-name-err' : undefined}
-              className={inputCls(!!errors.name)}
-            />
-          </Field>
-
           <fieldset>
             <legend className="mb-2 text-sm font-medium">{f.method}</legend>
             <div className="grid grid-cols-3 gap-1 bg-ink/5 p-1">

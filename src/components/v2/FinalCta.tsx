@@ -5,7 +5,7 @@ import { Button, Container, Reveal, TelegramIcon } from '../ui/primitives'
 export function FinalCta({ trialHref, consultHref }: { trialHref: string; consultHref: string }) {
   const f = v2.final
   return (
-    <section id="final" className="border-t border-white/10 bg-ink-2 py-11 sm:py-24 lg:py-32">
+    <section id="lead" className="border-t border-white/10 bg-ink-2 py-11 sm:py-24 lg:py-32">
       <Container>
         <Reveal className="notch relative overflow-hidden bg-linear-to-br from-signal-btn to-iris-btn p-5 text-white [--notch:28px] sm:p-10 sm:[--notch:36px] lg:p-14">
           <div

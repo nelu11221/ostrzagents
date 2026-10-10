@@ -22,7 +22,7 @@ async function sendTelegram(lead, utm) {
   const rows = [
     '🔥 <b>Новая заявка — OSTRO AI</b>',
     '',
-    `<b>Имя:</b> ${escapeHtml(lead.name)}`,
+    lead.name ? `<b>Имя:</b> ${escapeHtml(lead.name)}` : null,
     `<b>${escapeHtml(METHODS[lead.method] ?? lead.method)}:</b> ${escapeHtml(lead.contact)}`,
     lead.niche ? `<b>Ниша:</b> ${escapeHtml(lead.niche)}` : null,
     lead.intent ? `<b>Кнопка:</b> ${escapeHtml(lead.intent)}` : null,
@@ -81,7 +81,8 @@ export default async (req) => {
 
   const lead = {}
   for (const [key, max] of Object.entries(LIMITS)) lead[key] = String(data[key] ?? '').trim().slice(0, max)
-  if (!lead.name || lead.contact.length < 3) return json(422, { ok: false, error: 'invalid' })
+  // имя в форме больше не спрашиваем — достаточно контакта
+  if (lead.contact.length < 3) return json(422, { ok: false, error: 'invalid' })
 
   const utm = {}
   for (const [k, v] of Object.entries(data.utm ?? {}).slice(0, 10)) utm[String(k).slice(0, 40)] = String(v).slice(0, 200)
